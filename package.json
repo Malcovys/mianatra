@@ -4,18 +4,11 @@
   "version": "1.0.0",
   "scripts": {
     "start": "expo start",
-    "reset-project": "node ./scripts/reset-project.js",
     "android": "expo start --android",
     "ios": "expo start --ios",
     "web": "expo start --web",
     "lint": "expo lint",
-    "test": "node --no-warnings ./scripts/test-db-repositories.mjs && node --import tsx ./scripts/test-business-services.ts && node --import tsx ./scripts/test-onboarding-profile-flow.ts && node --import tsx ./scripts/test-profile-view-ui.ts && node --import tsx ./scripts/test-db-ui-integration.ts && node --import tsx ./scripts/test-ai-settings.ts && node --import tsx ./scripts/test-course-analysis.ts && node --import tsx ./scripts/test-course-pages-analysis.ts && node --import tsx ./scripts/test-persist-course-analysis.ts && node --import tsx ./scripts/test-generated-learning-assets.ts && node --import tsx ./scripts/test-course-processing-ui.ts && node --import tsx ./scripts/test-real-study-flow.ts && node --import tsx ./scripts/test-courses-list-view.ts && node --import tsx ./scripts/test-subject-overviews.ts && node --import tsx ./scripts/test-home-dashboard-ui.ts && node --import tsx ./scripts/test-course-import-flow.ts && node --import tsx ./scripts/test-course-gallery-import.ts && node --import tsx ./scripts/test-real-route-data.ts && node --import tsx ./server/ai/__tests__/test-ai.ts",
-    "gemma:check": "node --import tsx ./scripts/gemma-check.ts",
-    "typecheck": "tsc --noEmit",
-    "predb:studio": "node ./scripts/check-node-sqlite-studio.js",
-    "db:studio": "drizzle-kit studio",
-    "db:generate": "drizzle-kit generate",
-    "db:verify": "node --no-warnings ./scripts/verify-db.mjs"
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "@expo-google-fonts/fraunces": "^0.4.1",
