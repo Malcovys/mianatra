@@ -1,7 +1,7 @@
-import { useCallback, useRef, useState } from "react";
 import { useFocusEffect } from "expo-router";
-import { buildSubjectGradeFilters, loadSubjectOverviews } from "../services/subject-overview.service";
-import type { SubjectOverviewItem } from "../types/subject-overview.types";
+import { useCallback, useRef, useState } from "react";
+import { buildSubjectGradeFilters, loadSubjectOverviews } from "./subject-overview.service";
+import type { SubjectOverviewItem } from "./subject-overview.types";
 
 export type SubjectsOverviewStatus = "loading" | "ready" | "error";
 

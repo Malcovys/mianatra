@@ -1,8 +1,8 @@
-import { Tabs } from "expo-router";
+import { colors, fonts } from "@/src/theme";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
+import { Tabs } from "expo-router";
 import { View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { colors, fonts } from "@/src/theme";
 
 type TabIconProps = {
   color: string;
@@ -66,15 +66,6 @@ export default function TabLayout() {
           title: "Mes cours",
           tabBarIcon: ({ color }) => (
             <TabIcon name="book-open" color={color} />
-          ),
-        }}
-      />
-      <Tabs.Screen
-        name="profile"
-        options={{
-          title: "Profil",
-          tabBarIcon: ({ color }) => (
-            <TabIcon name="user-alt" color={color} />
           ),
         }}
       />

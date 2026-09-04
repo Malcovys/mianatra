@@ -5,13 +5,15 @@ import {
   AppScreen,
   AppText,
 } from "@/src/components/shared";
-import { useHomeDashboard } from "@/src/features/home/hooks/use-home-dashboard";
-import type { HomeDashboardActiveSession, HomeDashboardSubject } from "@/src/features/home/types/home-dashboard.types";
+import type { HomeDashboardActiveSession, HomeDashboardSubject } from "@/src/features/home/home-dashboard.types";
+import { useHomeDashboard } from "@/src/features/home/use-home-dashboard";
 import { colors, fonts } from "@/src/theme";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import { router } from "expo-router";
 import { ImageBackground, Pressable, View } from "react-native";
 
+
+/** Local helpers */
 function openSubject(subjectId: string) {
   router.push({
     pathname: "/subject/[subjectId]",
@@ -26,12 +28,142 @@ function openSession(sessionId: string) {
   });
 }
 
-type RevisionReminderProps = {
+
+/** Screen */
+export default function HomeScreen() {
+  const { dashboard, errorMessage, reload, status } = useHomeDashboard();
+
+  if (status === "loading") {
+    return (
+      <AppScreen contentClassName="gap-5 pb-10">
+        <AppCard className="gap-3">
+          <AppText variant="subtitle">Chargement de ton accueil…</AppText>
+          <AppText tone="secondary">On récupère ton profil et tes cours enregistrés.</AppText>
+        </AppCard>
+      </AppScreen>
+    );
+  }
+
+  if (status === "error" || !dashboard) {
+    return (
+      <AppScreen contentClassName="gap-5 pb-10">
+        <AppCard className="gap-3">
+          <AppText variant="subtitle">{"Impossible de charger l'accueil"}</AppText>
+          <AppText tone="secondary">{errorMessage ?? "Une erreur est survenue."}</AppText>
+          <AppButton title="Réessayer" iconName="redo" onPress={reload} />
+        </AppCard>
+      </AppScreen>
+    );
+  }
+
+  const activeSession = dashboard.activeSession;
+  const reminderSubject = dashboard.recentSubjects[0] ?? null;
+
+  return (
+    <AppScreen contentClassName="gap-4 pb-10 pt-3">
+      <View className="flex-row items-start justify-between gap-4">
+        <View className="min-w-0 flex-1 gap-1">
+          <AppText
+            variant="subtitle"
+            numberOfLines={1}
+            className="text-[17px] leading-6"
+          >
+            Bonjour 👋
+          </AppText>
+          <AppText tone="secondary" numberOfLines={1} className="text-[14px] leading-5">
+            Prête pour une petite révision ?
+          </AppText>
+        </View>
+        <Pressable
+          accessibilityRole="button"
+          accessibilityLabel="Notifications"
+          className="h-9 w-9 items-center justify-center rounded-full active:opacity-80"
+        >
+          <FontAwesome5 name="bell" size={18} color={colors.textPrimary} />
+        </Pressable>
+      </View>
+
+      <RevisionReminder activeSession={activeSession} subject={reminderSubject} />
+
+      <View className="flex-row items-center justify-between gap-3">
+        <AppText
+          variant="heading"
+          className="text-[20px] leading-6"
+          style={{ fontFamily: fonts.bold }}
+        >
+          Mes cours
+        </AppText>
+        <Pressable
+          accessibilityRole="button"
+          accessibilityLabel="Voir tous mes cours"
+          onPress={() => router.push("/courses")}
+          className="min-h-9 justify-center rounded-full px-1 active:opacity-80"
+        >
+          <AppText
+            variant="label"
+            tone="secondary"
+            className="text-[13px] leading-5"
+            style={{ fontFamily: fonts.semibold }}
+          >
+            Voir tout
+          </AppText>
+        </Pressable>
+      </View>
+
+      <View className="gap-3">
+        {dashboard.recentSubjects.length > 0 ? (
+          dashboard.recentSubjects.map((subject) => (
+            <SubjectCard
+              key={subject.id}
+              subject={{
+                id: subject.id,
+                name: subject.name,
+                chapterCount: subject.chapterCount,
+                progress: subject.progress,
+                iconName: subject.iconName,
+                color: subject.color,
+                mainWeakness: subject.mainWeakness,
+              }}
+              onPress={() => openSubject(subject.id)}
+            />
+          ))
+        ) : (
+          <AppCard
+            className="gap-2 rounded-xl p-4"
+            style={{
+              shadowColor: "#6E442A",
+              shadowOffset: { width: 0, height: 4 },
+              shadowOpacity: 0.06,
+              shadowRadius: 10,
+              elevation: 2,
+            }}
+          >
+            <AppText variant="label" className="text-[16px] leading-5">
+              Aucun cours pour le moment
+            </AppText>
+            <AppText tone="secondary" className="text-[14px] leading-5">
+              Ajoute un cours depuis ta galerie pour le retrouver ici.
+            </AppText>
+          </AppCard>
+        )}
+      </View>
+
+      <AppButton
+        title="Ajouter un cours"
+        iconName="plus"
+        onPress={() => router.push("/course/add")}
+        className="min-h-[54px]"
+      />
+    </AppScreen>
+  );
+}
+
+
+/** Local Component */
+function RevisionReminder({ activeSession, subject }: {
   activeSession: HomeDashboardActiveSession | null;
   subject: HomeDashboardSubject | null;
-};
-
-function RevisionReminder({ activeSession, subject }: RevisionReminderProps) {
+}) {
   if (!activeSession && !subject) {
     return null;
   }
@@ -128,134 +260,5 @@ function RevisionReminder({ activeSession, subject }: RevisionReminderProps) {
         </View>
       </View>
     </Pressable>
-  );
-}
-
-export default function HomeScreen() {
-  const { dashboard, errorMessage, reload, status } = useHomeDashboard();
-
-  if (status === "loading") {
-    return (
-      <AppScreen contentClassName="gap-5 pb-10">
-        <AppCard className="gap-3">
-          <AppText variant="subtitle">Chargement de ton accueil…</AppText>
-          <AppText tone="secondary">On récupère ton profil et tes cours enregistrés.</AppText>
-        </AppCard>
-      </AppScreen>
-    );
-  }
-
-  if (status === "error" || !dashboard) {
-    return (
-      <AppScreen contentClassName="gap-5 pb-10">
-        <AppCard className="gap-3">
-          <AppText variant="subtitle">{"Impossible de charger l'accueil"}</AppText>
-          <AppText tone="secondary">{errorMessage ?? "Une erreur est survenue."}</AppText>
-          <AppButton title="Réessayer" iconName="redo" onPress={reload} />
-          <AppButton title="Revenir à l'onboarding" iconName="user-plus" variant="secondary" onPress={() => router.replace("/onboarding")} />
-        </AppCard>
-      </AppScreen>
-    );
-  }
-
-  const activeSession = dashboard.activeSession;
-  const reminderSubject = dashboard.recentSubjects[0] ?? null;
-
-  return (
-    <AppScreen contentClassName="gap-4 pb-10 pt-3">
-      <View className="flex-row items-start justify-between gap-4">
-        <View className="min-w-0 flex-1 gap-1">
-          <AppText
-            variant="subtitle"
-            numberOfLines={1}
-            className="text-[17px] leading-6"
-          >
-            {`Bonjour ${dashboard.displayName} 👋`}
-          </AppText>
-          <AppText tone="secondary" numberOfLines={1} className="text-[14px] leading-5">
-            Prête pour une petite révision ?
-          </AppText>
-        </View>
-        <Pressable
-          accessibilityRole="button"
-          accessibilityLabel="Notifications"
-          className="h-9 w-9 items-center justify-center rounded-full active:opacity-80"
-        >
-          <FontAwesome5 name="bell" size={18} color={colors.textPrimary} />
-        </Pressable>
-      </View>
-
-      <RevisionReminder activeSession={activeSession} subject={reminderSubject} />
-
-      <View className="flex-row items-center justify-between gap-3">
-        <AppText
-          variant="heading"
-          className="text-[20px] leading-6"
-          style={{ fontFamily: fonts.bold }}
-        >
-          Mes cours
-        </AppText>
-        <Pressable
-          accessibilityRole="button"
-          accessibilityLabel="Voir tous mes cours"
-          onPress={() => router.push("/courses")}
-          className="min-h-9 justify-center rounded-full px-1 active:opacity-80"
-        >
-          <AppText
-            variant="label"
-            tone="secondary"
-            className="text-[13px] leading-5"
-            style={{ fontFamily: fonts.semibold }}
-          >
-            Voir tout
-          </AppText>
-        </Pressable>
-      </View>
-
-      <View className="gap-3">
-        {dashboard.recentSubjects.length > 0 ? (
-          dashboard.recentSubjects.map((subject) => (
-            <SubjectCard
-              key={subject.id}
-              subject={{
-                id: subject.id,
-                name: subject.name,
-                chapterCount: subject.chapterCount,
-                progress: subject.progress,
-                iconName: subject.iconName,
-                color: subject.color,
-                mainWeakness: subject.mainWeakness,
-              }}
-              onPress={() => openSubject(subject.id)}
-            />
-          ))
-        ) : (
-          <AppCard
-            className="gap-2 rounded-xl p-4"
-            style={{
-              shadowColor: "#6E442A",
-              shadowOffset: { width: 0, height: 4 },
-              shadowOpacity: 0.06,
-              shadowRadius: 10,
-              elevation: 2,
-            }}
-          >
-            <AppText variant="label" className="text-[16px] leading-5">
-              Aucun cours pour le moment
-            </AppText>
-            <AppText tone="secondary" className="text-[14px] leading-5">
-              Ajoute un cours depuis ta galerie pour le retrouver ici.
-            </AppText>
-          </AppCard>
-        )}
-      </View>
-
-      <AppButton
-        title="Ajouter un cours"
-        iconName="plus"
-        onPress={() => router.push("/course/add")}
-        className="min-h-[54px]"
-      />
-    </AppScreen>
   );
 }

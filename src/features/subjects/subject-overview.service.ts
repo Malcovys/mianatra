@@ -2,27 +2,8 @@ import type { Course, CourseDetail, Subject } from "@/src/db";
 import type { CourseListItem } from "@/src/features/courses";
 import { buildRealCourseResults } from "@/src/features/courses/services/course-route-state.service";
 import { buildCourseProgressSummary } from "@/src/features/progress/domain";
-import type { SubjectDetailView, SubjectOverviewItem } from "../types/subject-overview.types";
+import type { SubjectDetailView, SubjectOverviewItem } from "./subject-overview.types";
 
-type SubjectOverviewDeps = {
-  subjects: {
-    findAll: () => Promise<Subject[]>;
-    findById: (id: string) => Promise<Subject | null>;
-  };
-  courses: {
-    findAll: () => Promise<Course[]>;
-    findAllBySubject: (subjectId: string) => Promise<Course[]>;
-    findDetailById: (id: string) => Promise<CourseDetail | null>;
-  };
-};
-
-function normalizedIcon(subject: Subject) {
-  return subject.icon.trim() || null;
-}
-
-function normalizedColor(subject: Subject) {
-  return subject.color.trim() || null;
-}
 
 function latestDate(values: (string | null | undefined)[]) {
   return values.filter((value): value is string => Boolean(value)).sort((left, right) => right.localeCompare(left))[0] ?? null;
@@ -82,8 +63,8 @@ function buildSubjectOverview(subject: Subject, courses: readonly Course[], deta
   return {
     id: subject.id,
     name: subject.name,
-    color: normalizedColor(subject),
-    iconName: normalizedIcon(subject),
+    color: subject.color.trim() || null,
+    iconName: subject.icon.trim() || null,
     chapterCount: courses.length,
     progress: clampProgress(summary.progress),
     masteredCount: summary.mastered,
@@ -102,62 +83,49 @@ export function buildSubjectGradeFilters(items: readonly Pick<SubjectOverviewIte
   return ["Tous", ...Array.from(new Set(grades)).sort((left, right) => left.localeCompare(right))];
 }
 
-export function createSubjectOverviewService(dependencies: SubjectOverviewDeps) {
-  async function loadNonArchivedCourseDetails(courses: Course[]) {
+async function loadNonArchivedCourseDetails(courses: Course[], findDetailById: (id: string) => Promise<CourseDetail | null>) {
     const activeCourses = courses.filter((course) => course.status !== "archived");
-    const details = await Promise.all(activeCourses.map((course) => dependencies.courses.findDetailById(course.id)));
+    const details = await Promise.all(activeCourses.map((course) => findDetailById(course.id)));
     return {
       activeCourses,
       detailsByCourseId: new Map(details.filter((detail): detail is CourseDetail => detail !== null).map((detail) => [detail.course.id, detail])),
     };
   }
 
-  return {
-    loadSubjectOverviews: async (): Promise<SubjectOverviewItem[]> => {
-      const [subjects, allCourses] = await Promise.all([dependencies.subjects.findAll(), dependencies.courses.findAll()]);
-      const { activeCourses, detailsByCourseId } = await loadNonArchivedCourseDetails(allCourses);
+export async function loadSubjectOverviews(): Promise<SubjectOverviewItem[]> {
+  const { subjectsRepository, coursesRepository } = await import("@/src/db");
+  const [subjects, allCourses] = await Promise.all([subjectsRepository.findAll(), coursesRepository.findAll()]);
+  const { activeCourses, detailsByCourseId } = await loadNonArchivedCourseDetails(allCourses, coursesRepository.findDetailById);
 
-      return subjects
-        .map((subject) => {
-          const subjectCourses = activeCourses.filter((course) => course.subjectId === subject.id);
-          if (subjectCourses.length === 0) {
-            return null;
-          }
-          const subjectDetails = subjectCourses
-            .map((course) => detailsByCourseId.get(course.id))
-            .filter((detail): detail is CourseDetail => detail !== undefined);
-          return buildSubjectOverview(subject, subjectCourses, subjectDetails);
-        })
-        .filter((item): item is SubjectOverviewItem => item !== null)
-        .sort((left, right) => right.updatedAt.localeCompare(left.updatedAt));
-    },
-    loadSubjectDetail: async (subjectId: string): Promise<SubjectDetailView | null> => {
-      const subject = await dependencies.subjects.findById(subjectId);
-      if (!subject) {
-        return null;
-      }
-
-      const allSubjectCourses = await dependencies.courses.findAllBySubject(subjectId);
-      const { activeCourses, detailsByCourseId } = await loadNonArchivedCourseDetails(allSubjectCourses);
-      const details = activeCourses
+  return subjects
+    .map((subject) => {
+      const subjectCourses = activeCourses.filter((course) => course.subjectId === subject.id);
+      if (subjectCourses.length === 0) return null;
+      const details = subjectCourses
         .map((course) => detailsByCourseId.get(course.id))
         .filter((detail): detail is CourseDetail => detail !== undefined);
-      const overview = buildSubjectOverview(subject, activeCourses, details);
-      const chapters = details.map(toCourseListItem).sort((left, right) => right.updatedAt.localeCompare(left.updatedAt));
-      return { subject: overview, chapters };
-    },
+      return buildSubjectOverview(subject, subjectCourses, details);
+    })
+    .filter((item): item is SubjectOverviewItem => item !== null)
+    .sort((left, right) => right.updatedAt.localeCompare(left.updatedAt));
+}
+
+export async function loadSubjectDetail(subjectId: string): Promise<SubjectDetailView | null> {
+  const { subjectsRepository, coursesRepository } = await import("@/src/db");
+  const subject = await subjectsRepository.findById(subjectId);
+  if (!subject) return null;
+
+  const allSubjectCourses = await coursesRepository.findAllBySubject(subjectId);
+  const { activeCourses, detailsByCourseId } = await loadNonArchivedCourseDetails(
+    allSubjectCourses,
+    coursesRepository.findDetailById,
+  );
+  const details = activeCourses
+    .map((course) => detailsByCourseId.get(course.id))
+    .filter((detail): detail is CourseDetail => detail !== undefined);
+
+  return {
+    subject: buildSubjectOverview(subject, activeCourses, details),
+    chapters: details.map(toCourseListItem).sort((left, right) => right.updatedAt.localeCompare(left.updatedAt)),
   };
-}
-
-async function getDeps(): Promise<SubjectOverviewDeps> {
-  const repositories = await import("@/src/db");
-  return { subjects: repositories.subjectsRepository, courses: repositories.coursesRepository };
-}
-
-export async function loadSubjectOverviews() {
-  return createSubjectOverviewService(await getDeps()).loadSubjectOverviews();
-}
-
-export async function loadSubjectDetail(subjectId: string) {
-  return createSubjectOverviewService(await getDeps()).loadSubjectDetail(subjectId);
 }

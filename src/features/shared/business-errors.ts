@@ -9,12 +9,6 @@ export class BusinessError extends Error {
   }
 }
 
-export class ProfileNotFoundError extends BusinessError {
-  constructor(cause?: unknown) {
-    super("PROFILE_NOT_FOUND", "Profile not found.", { cause });
-  }
-}
-
 export class SubjectNotFoundError extends BusinessError {
   constructor(cause?: unknown) {
     super("SUBJECT_NOT_FOUND", "Subject not found.", { cause });

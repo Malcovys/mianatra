@@ -1,4 +1,6 @@
 import "@/global.css";
+import { MigrationGate } from "@/src/components/system/MigrationGate";
+import { GluestackUIProvider } from '@/src/components/ui/gluestack-ui-provider';
 import {
   Fraunces_700Bold,
 } from "@expo-google-fonts/fraunces";
@@ -12,12 +14,7 @@ import {
 import { useFonts } from "expo-font";
 import { Stack } from "expo-router";
 import { SafeAreaProvider } from "react-native-safe-area-context";
-import { GluestackUIProvider } from '@/src/components/ui/gluestack-ui-provider';
-import { MigrationGate } from "@/src/components/system/MigrationGate";
 
-function AppStack() {
-  return <Stack screenOptions={{ headerShown: false }} />;
-}
 
 export default function RootLayout() {
   const [fontsLoaded] = useFonts({
@@ -37,7 +34,7 @@ export default function RootLayout() {
     <SafeAreaProvider>
       <GluestackUIProvider>
         <MigrationGate>
-          <AppStack />
+          <Stack screenOptions={{ headerShown: false }} />
         </MigrationGate>
       </GluestackUIProvider>
     </SafeAreaProvider>

@@ -30,8 +30,6 @@ export function ensureDifficulty(value: number): Difficulty {
 
 export type { InferInsertModel, InferSelectModel } from "drizzle-orm";
 
-export type UserProfile = typeof schema.userProfiles.$inferSelect;
-export type NewUserProfile = typeof schema.userProfiles.$inferInsert;
 export type Subject = typeof schema.subjects.$inferSelect;
 export type NewSubject = typeof schema.subjects.$inferInsert;
 export type Course = typeof schema.courses.$inferSelect;

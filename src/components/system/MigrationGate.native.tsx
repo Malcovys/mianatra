@@ -1,10 +1,10 @@
-import { useMigrations } from "drizzle-orm/expo-sqlite/migrator";
-import { useEffect, useState } from "react";
-import { View } from "react-native";
 import { AppButton, AppText } from "@/src/components/shared";
 import { db } from "@/src/db/client";
 import { initializeDatabaseConnection, prepareDatabaseForMigrations } from "@/src/db/initialization";
 import migrations from "@/src/db/migrations/migrations";
+import { useMigrations } from "drizzle-orm/expo-sqlite/migrator";
+import { useEffect, useState } from "react";
+import { View } from "react-native";
 
 type MigrationGateProps = {
   children: React.ReactNode;

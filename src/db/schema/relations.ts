@@ -12,7 +12,6 @@ import { revisionSheets } from "./revision-sheets.table";
 import { sessionReports } from "./session-reports.table";
 import { studySessions } from "./study-sessions.table";
 import { subjects } from "./subjects.table";
-import { userProfiles } from "./user-profiles.table";
 
 export const schemaTables = {
   appSettings,
@@ -28,11 +27,9 @@ export const schemaTables = {
   sessionReports,
   studySessions,
   subjects,
-  userProfiles,
 };
 
 export const dbRelations = defineRelations(schemaTables, (r) => ({
-  userProfiles: {},
   subjects: {
     courses: r.many.courses({ from: r.subjects.id, to: r.courses.subjectId }),
   },

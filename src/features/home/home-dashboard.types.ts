@@ -18,7 +18,6 @@ export type HomeDashboardActiveSession = {
 };
 
 export type HomeDashboard = {
-  displayName: string;
   recentSubjects: HomeDashboardSubject[];
   activeSession: HomeDashboardActiveSession | null;
 };
