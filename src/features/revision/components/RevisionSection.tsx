@@ -1,13 +1,19 @@
-import { Image, type ImageSourcePropType } from "react-native";
 import { AppCard, AppText } from "@/src/components/shared";
-import type { DemoRevisionSection } from "@/src/data/demo-data";
+import { Image, type ImageSourcePropType } from "react-native";
+type RevisionSectionData = {
+  title: string;
+  text?: string;
+  image?: "function-graph";
+  formula?: string;
+  formulaDetail?: string;
+};
 
 const revisionImages: Record<"function-graph", ImageSourcePropType> = {
   "function-graph": require("../../../../assets/mianatra/image_function_graph_exercise.png"),
 };
 
 type RevisionSectionProps = {
-  section: DemoRevisionSection;
+  section: RevisionSectionData;
 };
 
 export function RevisionSection({ section }: RevisionSectionProps) {

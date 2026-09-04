@@ -1,12 +1,13 @@
-import { Pressable, View } from "react-native";
-import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import { AppText } from "@/src/components/shared";
-import type { DemoProfileMenuItem } from "@/src/data/demo-data";
 import { colors } from "@/src/theme";
+import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
+import { Pressable, View } from "react-native";
+
+type ProfileMenuItem = { label: string; iconName: React.ComponentProps<typeof FontAwesome5>["name"] };
 
 type ProfileMenuRowProps = {
-  item: DemoProfileMenuItem;
-  onPress: (item: DemoProfileMenuItem) => void;
+  item: ProfileMenuItem;
+  onPress: (item: ProfileMenuItem) => void;
 };
 
 export function ProfileMenuRow({ item, onPress }: ProfileMenuRowProps) {

@@ -1,11 +1,12 @@
-import { Image, View } from "react-native";
-import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import { AppButton, AppCard, AppText, StatusBadge } from "@/src/components/shared";
-import type { DemoCourse } from "@/src/data/demo-data";
 import { colors } from "@/src/theme";
+import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
+import { Image, View } from "react-native";
+
+type RecommendationCourse = { subject: string; title: string };
 
 type RecommendationCardProps = {
-  course: DemoCourse;
+  course: RecommendationCourse;
   onContinue: () => void;
 };
 

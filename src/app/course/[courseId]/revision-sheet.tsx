@@ -1,19 +1,13 @@
-import { Alert, View } from "react-native";
-import { useEffect, useState } from "react";
-import { router, useLocalSearchParams } from "expo-router";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { AppButton, AppCard, AppScreen, AppText } from "@/src/components/shared";
+import { getCourseDetail } from "@/src/features/courses";
 import { CourseTopBar } from "@/src/features/courses/components";
-import { getCourseDetail, isExplicitDemoId } from "@/src/features/courses";
-import { RevisionSection } from "@/src/features/revision/components";
 import { loadLatestRevisionSheet, type RevisionSheetViewState } from "@/src/features/revision-sheet/services/revision-sheet-view.service";
 import { startRealCourseSession } from "@/src/features/study-session/services/real-session-view.service";
-import { demoCourses, demoRevisionSheet, demoSession } from "@/src/data/demo-data";
 import { colors, fonts } from "@/src/theme";
-
-export function generateStaticParams(): Record<string, string>[] {
-  return demoCourses.map((course) => ({ courseId: course.id }));
-}
+import { router, useLocalSearchParams } from "expo-router";
+import { useEffect, useState } from "react";
+import { View } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 export default function RevisionSheetScreen() {
   const insets = useSafeAreaInsets();
@@ -24,21 +18,11 @@ export default function RevisionSheetScreen() {
   const [realSheet, setRealSheet] = useState<RevisionSheetViewState | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [sessionError, setSessionError] = useState<string | null>(null);
-  const isDemoCourse = isExplicitDemoId(resolvedCourseId, demoCourses.map((demoItem) => demoItem.id));
-  const course = isDemoCourse ? demoCourses.find((demoItem) => demoItem.id === resolvedCourseId) : undefined;
-  const sheet = isDemoCourse && demoRevisionSheet.courseId === resolvedCourseId ? demoRevisionSheet : undefined;
 
   useEffect(() => {
     let cancelled = false;
     async function load() {
       if (!resolvedCourseId) {
-        setIsLoading(false);
-        return;
-      }
-      if (isDemoCourse) {
-        setRealCourseExists(false);
-        setRealCourseMissing(false);
-        setRealSheet(null);
         setIsLoading(false);
         return;
       }
@@ -67,13 +51,9 @@ export default function RevisionSheetScreen() {
     return () => {
       cancelled = true;
     };
-  }, [isDemoCourse, resolvedCourseId]);
+  }, [resolvedCourseId]);
 
   async function startExercises() {
-    if (isDemoCourse) {
-      router.push({ pathname: "/session/[sessionId]", params: { sessionId: demoSession.id } });
-      return;
-    }
     if (!resolvedCourseId || !realCourseExists) {
       setSessionError("Aucun exercice réel n'est disponible pour ce cours.");
       return;
@@ -167,54 +147,6 @@ export default function RevisionSheetScreen() {
     );
   }
 
-  if (!course || !sheet) {
-    return (
-      <AppScreen contentClassName="gap-4 pb-8">
-        <CourseTopBar title="Ma fiche" />
-        <AppCard className="gap-3">
-          <AppText variant="subtitle">Fiche indisponible</AppText>
-          <AppText tone="secondary">
-            {"Aucune fiche de démonstration n'est disponible pour ce cours."}
-          </AppText>
-          <AppButton
-            title="Retour aux cours"
-            iconName="arrow-left"
-            onPress={() => router.replace("/courses")}
-          />
-        </AppCard>
-      </AppScreen>
-    );
-  }
-
-  return (
-    <AppScreen
-      contentClassName="gap-4 pt-2"
-      contentStyle={{ paddingBottom: Math.max(insets.bottom + 28, 58) }}
-    >
-      <CourseTopBar
-        title="Ma fiche"
-        onOptionsPress={() =>
-          Alert.alert(
-            "Options de la fiche",
-            "Modifier la fiche — disponible prochainement\nRégénérer une section — disponible prochainement",
-          )
-        }
-      />
-      <AppText variant="heading">{sheet.summaryTitle}</AppText>
-      <AppText variant="heading">{sheet.title}</AppText>
-
-      {sheet.sections.map((section) => (
-        <RevisionSection key={section.id} section={section} />
-      ))}
-
-      <AppButton
-        title="Faire des exercices"
-        iconName="pen"
-        className="min-h-[54px]"
-        onPress={() => void startExercises()}
-      />
-    </AppScreen>
-  );
 }
 
 function RevisionListSection({ title, items }: { title: string; items: readonly string[] }) {

@@ -1,21 +1,14 @@
 export {
-  archiveCourse,
-  courseService,
+  archiveCourse, buildRealCourseResults, courseService,
   createCourseService,
   createDraftCourse,
-  deleteCourse,
-  buildRealCourseResults,
-  emptyCourseResultCounters,
+  deleteCourse, emptyCourseResultCounters,
   getCourse,
-  getCourseDetail,
-  isExplicitDemoId,
-  loadRealCourseResults,
-  listCourses,
-  listCoursesBySubject,
-  renameCourse,
-  resolveExerciseSessionTarget,
-  updateCourse,
+  getCourseDetail, listCourses,
+  listCoursesBySubject, loadRealCourseResults, renameCourse,
+  updateCourse
 } from "./services/course.service";
 export type { CourseInput, CoursePatch, CourseRecentActivity, CourseResultCounters, CourseRouteResults, RealCourseResultsState } from "./services/course.service";
 export { buildCourseGradeFilters, createCoursesListViewService, loadCoursesList } from "./services/courses-list-view.service";
 export type { CourseListItem } from "./types/course-list.types";
+

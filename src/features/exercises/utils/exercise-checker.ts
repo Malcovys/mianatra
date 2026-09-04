@@ -1,4 +1,4 @@
-import type { DemoExercise } from "@/src/data/demo-data";
+import type { RealSessionExercise } from "@/src/features/study-session/utils/real-session-exercise";
 import { normalizeAnswer } from "./answer-normalizer";
 
 export type ExerciseCheckResult = {
@@ -10,7 +10,7 @@ export type ExerciseCheckResult = {
 };
 
 export function checkExerciseAnswer(
-  exercise: DemoExercise,
+  exercise: RealSessionExercise,
   answer: string,
 ): ExerciseCheckResult {
   const normalizedAnswer = normalizeAnswer(answer);

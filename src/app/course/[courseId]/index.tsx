@@ -1,8 +1,3 @@
-import { Alert, Image, Pressable, View } from "react-native";
-import { useEffect, useMemo, useState } from "react";
-import { router, useLocalSearchParams } from "expo-router";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
-import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import {
   AppButton,
   AppCard,
@@ -10,21 +5,21 @@ import {
   AppText,
   ProgressBar,
 } from "@/src/components/shared";
+import { useCourseProcessing } from "@/src/features/course-processing";
+import { buildRealCourseResults, emptyCourseResultCounters } from "@/src/features/courses";
 import {
   CourseActionTabs,
   CourseProgressCard,
   CourseSummary,
   CourseTopBar,
 } from "@/src/features/courses/components";
-import { buildRealCourseResults, emptyCourseResultCounters, isExplicitDemoId, resolveExerciseSessionTarget } from "@/src/features/courses";
-import { useCourseProcessing } from "@/src/features/course-processing";
 import { countRealCourseExercises, startRealCourseSession } from "@/src/features/study-session/services/real-session-view.service";
-import { demoCourseResults, demoCourses, demoSession } from "@/src/data/demo-data";
 import { colors, fonts } from "@/src/theme";
-
-export function generateStaticParams(): Record<string, string>[] {
-  return demoCourses.map((course) => ({ courseId: course.id }));
-}
+import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
+import { router, useLocalSearchParams } from "expo-router";
+import { useEffect, useMemo, useState } from "react";
+import { Alert, Image, Pressable, View } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 type CoursePrimaryAction = {
   title: string;
@@ -36,12 +31,10 @@ export default function CourseDetailScreen() {
   const insets = useSafeAreaInsets();
   const { courseId } = useLocalSearchParams<{ courseId?: string }>();
   const resolvedCourseId = Array.isArray(courseId) ? courseId[0] : courseId;
-  const isDemoCourse = isExplicitDemoId(resolvedCourseId, demoCourses.map((demoItem) => demoItem.id));
-  const demoCourse = isDemoCourse ? demoCourses.find((demoItem) => demoItem.id === resolvedCourseId) : undefined;
-  const processing = useCourseProcessing(isDemoCourse ? undefined : resolvedCourseId);
+  const processing = useCourseProcessing(resolvedCourseId);
   const [realExerciseCount, setRealExerciseCount] = useState(0);
   const [sessionError, setSessionError] = useState<string | null>(null);
-  const realDetail = isDemoCourse ? null : processing.detail;
+  const realDetail = processing.detail;
   const realResults = realDetail ? buildRealCourseResults(realDetail) : null;
   const course = realDetail
     ? {
@@ -53,7 +46,7 @@ export default function CourseDetailScreen() {
         lastRevision: realDetail.course.lastReviewedAt ? "récente" : "jamais",
         summary: realDetail.course.summary ? [realDetail.course.summary] : [],
       }
-    : demoCourse;
+    : null;
 
   useEffect(() => {
     let cancelled = false;
@@ -80,7 +73,7 @@ export default function CourseDetailScreen() {
         onPress: () =>
           router.push({
             pathname: "/course/[courseId]/revision-sheet",
-            params: { courseId: demoCourse?.id ?? "" },
+            params: { courseId: "" },
           }),
       };
     }
@@ -123,36 +116,23 @@ export default function CourseDetailScreen() {
         router.push({ pathname: "/session/[sessionId]", params: { sessionId: session.id } });
       },
     };
-  }, [demoCourse?.id, processing, realDetail, realExerciseCount]);
+  }, [processing, realDetail, realExerciseCount]);
 
   async function openExercises() {
     setSessionError(null);
     if (!realDetail) {
-      const targetSessionId = resolveExerciseSessionTarget({
-        isDemoCourse,
-        demoSessionId: demoSession.id,
-        realSessionId: null,
-      });
-      if (targetSessionId) {
-        router.push({ pathname: "/session/[sessionId]", params: { sessionId: targetSessionId } });
-      }
       return;
     }
 
     const session = await startRealCourseSession(realDetail.course.id);
-    const targetSessionId = resolveExerciseSessionTarget({
-      isDemoCourse: false,
-      demoSessionId: demoSession.id,
-      realSessionId: session?.id ?? null,
-    });
-    if (!targetSessionId) {
+    if (!session) {
       setSessionError("Aucun exercice réel n'est disponible pour ce cours.");
       return;
     }
-    router.push({ pathname: "/session/[sessionId]", params: { sessionId: targetSessionId } });
+    router.push({ pathname: "/session/[sessionId]", params: { sessionId: session.id } });
   }
 
-  if (!isDemoCourse && !realDetail && !processing.hasLoadedDetail) {
+  if (!realDetail && !processing.hasLoadedDetail) {
     return (
       <AppScreen contentClassName="gap-5 pb-8">
         <CourseTopBar title="Chargement" />
@@ -184,7 +164,7 @@ export default function CourseDetailScreen() {
   }
 
   const summaryItems = course.summary ?? [];
-  const progressCounters = realResults?.counters ?? (isDemoCourse ? demoCourseResults.counters : emptyCourseResultCounters);
+  const progressCounters = realResults?.counters ?? emptyCourseResultCounters;
   const showProcessingCard =
     realDetail &&
     (["analyzing", "persisting", "generating_sheet", "generating_exercises", "error"].includes(processing.status) ||

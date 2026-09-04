@@ -1,25 +1,24 @@
-import {
-  createContext,
-  useCallback,
-  useContext,
-  useMemo,
-  useReducer,
-  type ReactNode,
-} from "react";
-import type { DemoExercise } from "@/src/data/demo-data";
-import { demoSession, demoTargetedExercises } from "@/src/data/demo-data";
 import { checkExerciseAnswer } from "@/src/features/exercises/utils/exercise-checker";
-import { buildSessionSummary } from "../utils/session-summary";
+import {
+    createContext,
+    useCallback,
+    useContext,
+    useMemo,
+    useReducer,
+    type ReactNode,
+} from "react";
 import type { SessionAttempt, SessionMode, SessionSummary } from "../types/study-session.types";
+import type { RealSessionExercise } from "../utils/real-session-exercise";
+import { buildSessionSummary } from "../utils/session-summary";
 
 type SessionStatus = "idle" | "active" | "completed" | "invalid";
 
-type DemoSessionState = {
+type SessionState = {
   sessionId: string | null;
   status: SessionStatus;
   mode: SessionMode;
   currentIndex: number;
-  exercises: DemoExercise[];
+  exercises: RealSessionExercise[];
   answers: Record<string, string>;
   attempts: SessionAttempt[];
   hintsUsed: Record<string, boolean>;
@@ -27,9 +26,9 @@ type DemoSessionState = {
   message: string | null;
 };
 
-type DemoSessionContextValue = {
-  state: DemoSessionState;
-  currentExercise: DemoExercise | null;
+type SessionContextValue = {
+  state: SessionState;
+  currentExercise: RealSessionExercise | null;
   lastAttempt: SessionAttempt | null;
   summary: SessionSummary;
   isLastExercise: boolean;
@@ -43,8 +42,8 @@ type DemoSessionContextValue = {
   resetSession: () => void;
 };
 
-type DemoSessionAction =
-  | { type: "start"; sessionId: string; mode: SessionMode; exercises: DemoExercise[] }
+type SessionAction =
+  | { type: "start"; sessionId: string; mode: SessionMode; exercises: RealSessionExercise[] }
   | { type: "setAnswer"; exerciseId: string; answer: string }
   | { type: "showHint"; exerciseId: string }
   | { type: "submitAnswer"; attempt: SessionAttempt }
@@ -53,12 +52,12 @@ type DemoSessionAction =
   | { type: "invalid"; sessionId: string }
   | { type: "reset" };
 
-const initialState: DemoSessionState = {
-  sessionId: demoSession.id,
-  status: "active",
+const initialState: SessionState = {
+  sessionId: null,
+  status: "idle",
   mode: "initial",
   currentIndex: 0,
-  exercises: demoSession.exercises,
+  exercises: [],
   answers: {},
   attempts: [],
   hintsUsed: {},
@@ -66,9 +65,9 @@ const initialState: DemoSessionState = {
   message: null,
 };
 
-const DemoSessionContext = createContext<DemoSessionContextValue | null>(null);
+const SessionContext = createContext<SessionContextValue | null>(null);
 
-function reducer(state: DemoSessionState, action: DemoSessionAction): DemoSessionState {
+function reducer(state: SessionState, action: SessionAction): SessionState {
   switch (action.type) {
     case "start": {
       const shouldKeepState =
@@ -146,7 +145,7 @@ function reducer(state: DemoSessionState, action: DemoSessionAction): DemoSessio
   }
 }
 
-export function DemoSessionProvider({ children }: { children: ReactNode }) {
+export function SessionProvider({ children }: { children: ReactNode }) {
   const [state, dispatch] = useReducer(reducer, initialState);
 
   const currentExercise = state.exercises[state.currentIndex] ?? null;
@@ -159,16 +158,11 @@ export function DemoSessionProvider({ children }: { children: ReactNode }) {
   );
 
   const startSession = useCallback((sessionId: string, mode: SessionMode = "initial") => {
-    if (sessionId !== demoSession.id) {
-      dispatch({ type: "invalid", sessionId });
-      return;
-    }
-
     dispatch({
       type: "start",
       sessionId,
       mode,
-      exercises: mode === "targeted" ? demoTargetedExercises : demoSession.exercises,
+      exercises: [],
     });
   }, []);
 
@@ -214,9 +208,9 @@ export function DemoSessionProvider({ children }: { children: ReactNode }) {
   const startTargetedSession = useCallback(() => {
     dispatch({
       type: "start",
-      sessionId: demoSession.id,
+      sessionId: state.sessionId ?? "",
       mode: "targeted",
-      exercises: demoTargetedExercises,
+      exercises: [],
     });
   }, []);
 
@@ -257,14 +251,14 @@ export function DemoSessionProvider({ children }: { children: ReactNode }) {
     ],
   );
 
-  return <DemoSessionContext.Provider value={value}>{children}</DemoSessionContext.Provider>;
+  return <SessionContext.Provider value={value}>{children}</SessionContext.Provider>;
 }
 
-export function useDemoSession() {
-  const value = useContext(DemoSessionContext);
+export function useSession() {
+  const value = useContext(SessionContext);
 
   if (!value) {
-    throw new Error("useDemoSession must be used inside DemoSessionProvider");
+    throw new Error("useSession must be used inside SessionProvider");
   }
 
   return value;

@@ -1,31 +1,23 @@
-import { View } from "react-native";
-import { useEffect, useState } from "react";
-import { router, useLocalSearchParams } from "expo-router";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { AppButton, AppCard, AppScreen, AppText, ProgressBar } from "@/src/components/shared";
+import { loadRealCourseResults, type RealCourseResultsState } from "@/src/features/courses";
 import { CourseProgressRing, CourseTopBar } from "@/src/features/courses/components";
 import { CourseResultSummary, RecentActivityList } from "@/src/features/progress/components";
-import { isExplicitDemoId, loadRealCourseResults, type RealCourseResultsState } from "@/src/features/courses";
-import { demoCourseResults, demoCourses, demoSession } from "@/src/data/demo-data";
 import { fonts } from "@/src/theme";
-
-export function generateStaticParams(): Record<string, string>[] {
-  return demoCourses.map((course) => ({ courseId: course.id }));
-}
+import { router, useLocalSearchParams } from "expo-router";
+import { useEffect, useState } from "react";
+import { View } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 export default function CourseResultsScreen() {
   const insets = useSafeAreaInsets();
   const { courseId } = useLocalSearchParams<{ courseId?: string }>();
   const resolvedCourseId = Array.isArray(courseId) ? courseId[0] : courseId;
-  const isDemoCourse = isExplicitDemoId(resolvedCourseId, demoCourses.map((demoItem) => demoItem.id));
-  const course = isDemoCourse ? demoCourses.find((demoItem) => demoItem.id === resolvedCourseId) : undefined;
-  const demoResults = isDemoCourse && demoCourseResults.courseId === resolvedCourseId ? demoCourseResults : undefined;
   const [realState, setRealState] = useState<RealCourseResultsState | null>(null);
-  const [isLoading, setIsLoading] = useState(!isDemoCourse);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     let cancelled = false;
-    if (!resolvedCourseId || isDemoCourse) {
+    if (!resolvedCourseId) {
       setRealState(null);
       setIsLoading(false);
       return;
@@ -45,11 +37,11 @@ export default function CourseResultsScreen() {
     return () => {
       cancelled = true;
     };
-  }, [isDemoCourse, resolvedCourseId]);
+  }, [resolvedCourseId]);
 
   const realResults = realState?.status === "ready" ? realState.results : null;
-  const title = realState?.status === "ready" ? realState.courseTitle : course?.title;
-  const results = realResults ?? demoResults;
+  const title = realState?.status === "ready" ? realState.courseTitle : undefined;
+  const results = realResults;
 
   if (isLoading) {
     return (
@@ -133,7 +125,7 @@ export default function CourseResultsScreen() {
               accessibilityLabel={`Progression du chapitre : ${results.progress} pour cent`}
             />
             <AppText tone="secondary" className="text-[14px] leading-5">
-              {isDemoCourse ? `${results.progress} % de progression de démonstration.` : `${results.progress} % de progression.`}
+              {`${results.progress} % de progression.`}
             </AppText>
             {results.counters.notStarted > 0 ? (
               <AppText tone="secondary" className="text-[12px] leading-4">
@@ -146,19 +138,7 @@ export default function CourseResultsScreen() {
 
       <RecentActivityList activities={results.recentActivities} />
 
-      {isDemoCourse ? (
-        <AppButton
-          title="Reprendre avec des exercices"
-          iconName="pen"
-          variant="secondary"
-          onPress={() =>
-            router.push({
-              pathname: "/session/[sessionId]",
-              params: { sessionId: demoSession.id },
-            })
-          }
-        />
-      ) : null}
+      <AppButton title="Faire des exercices" iconName="pen" className="min-h-[54px]" onPress={() => router.push({ pathname: "/course/[courseId]", params: { courseId: resolvedCourseId } })} />
     </AppScreen>
   );
 }

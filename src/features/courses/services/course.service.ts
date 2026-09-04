@@ -184,8 +184,7 @@ export const courseService = {
 export {
   buildRealCourseResults,
   emptyCourseResultCounters,
-  isExplicitDemoId,
-  loadRealCourseResults,
-  resolveExerciseSessionTarget,
+  loadRealCourseResults
 } from "./course-route-state.service";
 export type { CourseRecentActivity, CourseResultCounters, CourseRouteResults, RealCourseResultsState } from "./course-route-state.service";
+

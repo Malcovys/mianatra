@@ -1,6 +1,5 @@
-import type { DemoExercise } from "@/src/data/demo-data";
-import { demoSession, demoTargetedExercises } from "@/src/data/demo-data";
 import type { SessionAttempt, SessionSummary } from "../types/study-session.types";
+import type { RealSessionExercise } from "./real-session-exercise";
 
 export function calculateSessionScore(attempts: SessionAttempt[], totalExercises: number) {
   if (totalExercises <= 0) {
@@ -12,7 +11,7 @@ export function calculateSessionScore(attempts: SessionAttempt[], totalExercises
   return Math.round((correctAnswers / totalExercises) * 100);
 }
 
-export function calculateDemoProgress(attempts: SessionAttempt[], totalExercises: number) {
+export function calculateSessionProgress(attempts: SessionAttempt[], totalExercises: number) {
   if (totalExercises <= 0) {
     return 0;
   }
@@ -22,19 +21,19 @@ export function calculateDemoProgress(attempts: SessionAttempt[], totalExercises
 
 export function buildSessionSummary(
   attempts: SessionAttempt[],
-  exercises: DemoExercise[],
-  targetedExercises: DemoExercise[] = demoTargetedExercises,
+  exercises: RealSessionExercise[],
+  targetedExercises: RealSessionExercise[] = [],
 ): SessionSummary {
   const totalExercises = exercises.length;
   const correctAnswers = attempts.filter((attempt) => attempt.isCorrect).length;
   const incorrectAttempts = attempts.filter((attempt) => !attempt.isCorrect);
-  const firstWeakness = incorrectAttempts[0]?.conceptName ?? demoSession.notionToImprove;
+  const firstWeakness = incorrectAttempts[0]?.conceptName ?? "Aucune notion identifiée";
 
   return {
     score: calculateSessionScore(attempts, totalExercises),
     correctAnswers,
     totalExercises,
-    progress: calculateDemoProgress(attempts, totalExercises),
+    progress: calculateSessionProgress(attempts, totalExercises),
     strength:
       correctAnswers > 0
         ? "Tu avances avec méthode et tu sais déjà mobiliser plusieurs repères du chapitre."

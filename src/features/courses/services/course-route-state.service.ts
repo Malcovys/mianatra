@@ -34,21 +34,6 @@ export const emptyCourseResultCounters: CourseResultCounters = {
   notStarted: 0,
 };
 
-export function isExplicitDemoId(id: string | undefined, demoIds: readonly string[]) {
-  return id !== undefined && demoIds.includes(id);
-}
-
-export function resolveExerciseSessionTarget(input: {
-  isDemoCourse: boolean;
-  demoSessionId: string;
-  realSessionId: string | null;
-}) {
-  if (input.isDemoCourse) {
-    return input.demoSessionId;
-  }
-  return input.realSessionId;
-}
-
 export function buildRealCourseResults(detail: Pick<CourseDetail, "course" | "concepts">): CourseRouteResults {
   const summary = buildCourseProgressSummary(detail.concepts);
   const { progress, recentActivities, ...counters } = summary;

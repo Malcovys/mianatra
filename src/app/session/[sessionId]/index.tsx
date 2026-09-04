@@ -1,29 +1,22 @@
-import { useEffect, useMemo, useState } from "react";
-import { Alert, View } from "react-native";
-import { router, useLocalSearchParams } from "expo-router";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
 import {
-  AppButton,
-  AppCard,
-  AppScreen,
-  AppText,
-  ScreenHeader,
+    AppButton,
+    AppCard,
+    AppScreen,
+    AppText,
+    ScreenHeader,
 } from "@/src/components/shared";
-import { demoSession } from "@/src/data/demo-data";
+import { ExerciseAnswerControl, ExerciseContent, ExerciseProgress, HintPanel } from "@/src/features/study-session/components";
 import {
-  loadRealSessionView,
-  submitRealSessionAnswer,
-  type RealSessionView,
+    loadRealSessionView,
+    submitRealSessionAnswer,
+    type RealSessionView,
 } from "@/src/features/study-session/services/real-session-view.service";
-import {
-  ExerciseAnswerControl,
-  ExerciseContent,
-  ExerciseProgress,
-  HintPanel,
-} from "@/src/features/study-session/components";
-import { useDemoSession } from "@/src/features/study-session/context/DemoSessionProvider";
 import { canSubmitExerciseAnswer, getAnswerControlKind } from "@/src/features/study-session/utils/session-answer-rendering";
 import { fonts } from "@/src/theme";
+import { router, useLocalSearchParams } from "expo-router";
+import { useEffect, useState } from "react";
+import { View } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 declare const __DEV__: boolean | undefined;
 
@@ -31,47 +24,22 @@ function isDev() {
   return typeof __DEV__ !== "undefined" ? __DEV__ : true;
 }
 
-export function generateStaticParams() {
-  return [{ sessionId: demoSession.id }];
-}
-
 export default function SessionScreen() {
   const insets = useSafeAreaInsets();
   const params = useLocalSearchParams<{ sessionId: string }>();
   const sessionId = Array.isArray(params.sessionId) ? params.sessionId[0] : params.sessionId;
-  const resolvedSessionId = sessionId ?? demoSession.id;
+  const resolvedSessionId = sessionId;
   const [realView, setRealView] = useState<RealSessionView | null>(null);
-  const [isLoadingRealView, setIsLoadingRealView] = useState(resolvedSessionId !== demoSession.id);
+  const [isLoadingRealView, setIsLoadingRealView] = useState(true);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [realAnswer, setRealAnswer] = useState("");
   const [realHintShown, setRealHintShown] = useState(false);
   const [isSubmittingRealAnswer, setIsSubmittingRealAnswer] = useState(false);
   const realCurrentExerciseId = realView?.status === "ready" ? realView.currentExercise.id : null;
-  const {
-    state,
-    currentExercise,
-    startSession,
-    setAnswer,
-    showHint,
-    submitAnswer,
-    resetSession,
-  } = useDemoSession();
-
-  useEffect(() => {
-    if (resolvedSessionId !== demoSession.id) {
-      return;
-    }
-    startSession(resolvedSessionId);
-  }, [resolvedSessionId, startSession]);
-
   useEffect(() => {
     let cancelled = false;
     async function load() {
-      if (resolvedSessionId === demoSession.id) {
-        setRealView(null);
-        setIsLoadingRealView(false);
-        return;
-      }
+      if (!resolvedSessionId) return;
       setIsLoadingRealView(true);
       const view = await loadRealSessionView(resolvedSessionId);
       if (!cancelled) {
@@ -93,17 +61,10 @@ export default function SessionScreen() {
     }
   }, [realCurrentExerciseId]);
 
-  const answer = currentExercise ? state.answers[currentExercise.id] ?? "" : "";
   const realCanSubmit =
     realView?.status === "ready"
       ? canSubmitExerciseAnswer(realView.currentExercise, realAnswer, isSubmittingRealAnswer)
       : false;
-  const demoCanSubmit = currentExercise ? canSubmitExerciseAnswer(currentExercise, answer) : false;
-  const hasStarted = useMemo(
-    () => state.attempts.length > 0 || Object.values(state.answers).some((value) => value.length > 0),
-    [state.answers, state.attempts.length],
-  );
-
   useEffect(() => {
     if (!isDev() || realView?.status !== "ready") {
       return;
@@ -122,40 +83,8 @@ export default function SessionScreen() {
     });
   }, [realView, resolvedSessionId]);
 
-  const handleSubmit = () => {
-    const attempt = submitAnswer();
-
-    if (!attempt) {
-      setErrorMessage("Écris ou choisis une réponse avant de demander la correction.");
-      return;
-    }
-
-    setErrorMessage(null);
-    router.push({
-      pathname: "/session/[sessionId]/correction",
-      params: { sessionId: resolvedSessionId },
-    });
-  };
-
   const handleExit = () => {
-    const leave = () => {
-      resetSession();
-      router.replace("/(tabs)");
-    };
-
-    if (!hasStarted) {
-      leave();
-      return;
-    }
-
-    Alert.alert(
-      "Quitter la session ?",
-      "La progression de cette série locale sera remise à zéro.",
-      [
-        { text: "Continuer", style: "cancel" },
-        { text: "Quitter", style: "destructive", onPress: leave },
-      ],
-    );
+    router.replace("/(tabs)");
   };
 
   if (isLoadingRealView) {
@@ -294,68 +223,4 @@ export default function SessionScreen() {
     );
   }
 
-  if (state.status === "invalid" || !currentExercise) {
-    return (
-      <AppScreen>
-        <ScreenHeader title="Session d'exercices" subtitle="Série indisponible" showBack />
-        <AppCard className="gap-4">
-          <AppText variant="subtitle">{"Impossible d'ouvrir cette série"}</AppText>
-          <AppText tone="secondary">
-            {state.message ?? "Aucun exercice n'est disponible pour cette session."}
-          </AppText>
-          <AppButton
-            title="Retour à l'accueil"
-            iconName="home"
-            onPress={() => router.replace("/(tabs)")}
-          />
-        </AppCard>
-      </AppScreen>
-    );
-  }
-
-  return (
-    <AppScreen
-      contentClassName="gap-4 pt-2"
-      contentStyle={{ paddingBottom: Math.max(insets.bottom + 28, 58) }}
-    >
-      <ScreenHeader
-        title={state.mode === "targeted" ? "Série ciblée" : "Session d'exercices"}
-        subtitle="Fonctions du second degré"
-      />
-      <View className="gap-3.5">
-        <ExerciseProgress current={state.currentIndex + 1} total={state.exercises.length} />
-        <ExerciseContent exercise={currentExercise} />
-        <ExerciseAnswerControl
-          answer={answer}
-          exercise={currentExercise}
-          onChangeAnswer={(nextAnswer) => {
-            setErrorMessage(null);
-            setAnswer(currentExercise.id, nextAnswer);
-          }}
-        />
-        {state.hintsUsed[currentExercise.id] ? <HintPanel hint={currentExercise.hint} /> : null}
-        {errorMessage ? (
-          <AppText accessibilityRole="alert" tone="error">
-            {errorMessage}
-          </AppText>
-        ) : null}
-        <AppButton
-          title={state.hintsUsed[currentExercise.id] ? "Indice affiché" : "Voir un indice"}
-          iconName="lightbulb"
-          variant="tertiary"
-          disabled={state.hintsUsed[currentExercise.id]}
-          className="min-h-[48px]"
-          onPress={() => showHint(currentExercise.id)}
-        />
-        <AppButton title="Valider ma réponse" iconName="check" disabled={!demoCanSubmit} className="min-h-[52px]" onPress={handleSubmit} />
-        <AppButton
-          title="Quitter la session"
-          iconName="times"
-          variant="secondary"
-          className="min-h-[50px] bg-transparent"
-          onPress={handleExit}
-        />
-      </View>
-    </AppScreen>
-  );
 }

@@ -1,5 +1,5 @@
-import type { DemoExercise } from "@/src/data/demo-data";
 import type { ExerciseCheckResult } from "@/src/features/exercises/utils/exercise-checker";
+import type { RealSessionExercise } from "../utils/real-session-exercise";
 
 export type SessionMode = "initial" | "targeted";
 
@@ -17,5 +17,5 @@ export type SessionSummary = {
   notionToImprove: string;
   nextRecommendation: string;
   attempts: SessionAttempt[];
-  targetedExercises: DemoExercise[];
+  targetedExercises: RealSessionExercise[];
 };

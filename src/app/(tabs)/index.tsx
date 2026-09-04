@@ -1,6 +1,3 @@
-import { ImageBackground, Pressable, View } from "react-native";
-import { router } from "expo-router";
-import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import { SubjectCard } from "@/src/components/core";
 import {
   AppButton,
@@ -9,8 +6,11 @@ import {
   AppText,
 } from "@/src/components/shared";
 import { useHomeDashboard } from "@/src/features/home/hooks/use-home-dashboard";
-import { colors, fonts } from "@/src/theme";
 import type { HomeDashboardActiveSession, HomeDashboardSubject } from "@/src/features/home/types/home-dashboard.types";
+import { colors, fonts } from "@/src/theme";
+import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
+import { router } from "expo-router";
+import { ImageBackground, Pressable, View } from "react-native";
 
 function openSubject(subjectId: string) {
   router.push({
