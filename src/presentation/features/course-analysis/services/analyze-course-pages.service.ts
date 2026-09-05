@@ -1,5 +1,6 @@
-import { z } from "zod";
 import { AIError } from "@/src/services/ai";
+import { z } from "zod";
+import { mergeCoursePageAnalyses } from "../domain/merge-course-page-analyses";
 import {
   CoursePageAnalysisError,
   CoursePageAnalysisImageError,
@@ -14,9 +15,8 @@ import {
   CoursePageAnalysisSchemaError,
   CoursePageAnalysisTimeoutError,
 } from "../errors/course-page-analysis.errors";
-import { mergeCoursePageAnalyses } from "../domain/merge-course-page-analyses";
-import { analyzeCoursePagesInputSchema, multiPageCourseAnalysisSchema, type AnalyzeCoursePagesInput, type MultiPageCourseAnalysis } from "../schemas/multi-page-course-analysis.schema";
 import type { CoursePageAnalysisInput } from "../schemas/course-page-analysis.schema";
+import { analyzeCoursePagesInputSchema, multiPageCourseAnalysisSchema, type AnalyzeCoursePagesInput, type MultiPageCourseAnalysis } from "../schemas/multi-page-course-analysis.schema";
 import type { AnalyzeSinglePage, PageAnalysisResult } from "../types/multi-page-course-analysis.types";
 
 type AnalyzeCoursePagesDependencies = {

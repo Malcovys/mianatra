@@ -3,13 +3,13 @@ import type { AITextResponse } from "@/src/services/ai";
 import { AIJsonParseError, AIJsonTruncatedError, AISchemaValidationError } from "@/src/services/ai/ai.errors";
 import type { AIService, AIStructuredResult } from "@/src/services/ai/ai.service";
 import {
-    ExerciseGenerationAINotConfiguredError,
-    ExerciseGenerationAnalysisNotFoundError,
-    ExerciseGenerationConceptsNotFoundError,
-    ExerciseGenerationCourseNotFoundError,
-    ExerciseGenerationCourseNotReadyError,
-    ExerciseGenerationInvalidOutputError,
-    ExerciseGenerationPersistenceFailedError,
+  ExerciseGenerationAINotConfiguredError,
+  ExerciseGenerationAnalysisNotFoundError,
+  ExerciseGenerationConceptsNotFoundError,
+  ExerciseGenerationCourseNotFoundError,
+  ExerciseGenerationCourseNotReadyError,
+  ExerciseGenerationInvalidOutputError,
+  ExerciseGenerationPersistenceFailedError,
 } from "../errors/exercise-generation.errors";
 import { buildCourseExercisesPrompt } from "../prompts/course-exercises.prompt";
 import { exerciseGenerationSchema, type GeneratedExercise } from "../schemas/generated-exercises.schema";

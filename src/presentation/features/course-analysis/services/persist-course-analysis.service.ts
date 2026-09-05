@@ -1,11 +1,11 @@
 import type { Concept, Course, CourseAnalysis, Subject } from "@/src/database";
 import {
-    PersistCourseAnalysisConceptsReferencedError,
-    PersistCourseAnalysisCourseNotFoundError,
-    PersistCourseAnalysisFailedError,
-    PersistCourseAnalysisInvalidError,
-    PersistCourseAnalysisNoConceptsError,
-    PersistCourseAnalysisSubjectNotFoundError,
+  PersistCourseAnalysisConceptsReferencedError,
+  PersistCourseAnalysisCourseNotFoundError,
+  PersistCourseAnalysisFailedError,
+  PersistCourseAnalysisInvalidError,
+  PersistCourseAnalysisNoConceptsError,
+  PersistCourseAnalysisSubjectNotFoundError,
 } from "../errors/persist-course-analysis.errors";
 import { multiPageCourseAnalysisSchema, type MultiPageCourseAnalysis } from "../schemas/multi-page-course-analysis.schema";
 

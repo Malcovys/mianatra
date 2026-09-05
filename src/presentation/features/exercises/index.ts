@@ -5,20 +5,9 @@ export {
   checkTrueFalseAnswer,
   classifyMistake,
   normalizeAnswer,
-  validateExerciseAnswer,
+  validateExerciseAnswer
 } from "./domain";
 export type { AnswerValidationResult, AnswerValidationStatus, MistakeType } from "./domain";
-export { generateCourseExercises } from "./services/generate-course-exercises.service";
-export type {
-  ExerciseCourseData,
-  GenerateCourseExercisesDependencies,
-  GenerateCourseExercisesOptions,
-  GenerateCourseExercisesResult,
-  PersistGeneratedExerciseInput,
-} from "./services/generate-course-exercises.service";
-export { exerciseGenerationSchema, generatedExerciseSchema, generatedExercisesSchema, generatedExerciseTypes } from "./schemas/generated-exercises.schema";
-export type { GeneratedExercise, GeneratedExercisesOutput } from "./schemas/generated-exercises.schema";
-export { buildCourseExercisesPrompt } from "./prompts/course-exercises.prompt";
 export {
   ExerciseGenerationAINotConfiguredError,
   ExerciseGenerationAnalysisNotFoundError,
@@ -28,6 +17,17 @@ export {
   ExerciseGenerationCourseNotReadyError,
   ExerciseGenerationError,
   ExerciseGenerationInvalidOutputError,
-  ExerciseGenerationPersistenceFailedError,
+  ExerciseGenerationPersistenceFailedError
 } from "./errors/exercise-generation.errors";
 export type { ExerciseGenerationErrorCode } from "./errors/exercise-generation.errors";
+export { buildCourseExercisesPrompt } from "./prompts/course-exercises.prompt";
+export { exerciseGenerationSchema, generatedExerciseSchema, generatedExercisesSchema, generatedExerciseTypes } from "./schemas/generated-exercises.schema";
+export type { GeneratedExercise, GeneratedExercisesOutput } from "./schemas/generated-exercises.schema";
+export { generateCourseExercises } from "./services/generate-course-exercises.service";
+export type {
+  ExerciseCourseData,
+  GenerateCourseExercisesDependencies,
+  GenerateCourseExercisesOptions,
+  GenerateCourseExercisesResult,
+  PersistGeneratedExerciseInput
+} from "./services/generate-course-exercises.service";

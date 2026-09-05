@@ -1,4 +1,3 @@
-import { z } from "zod";
 import {
   AIAuthenticationError,
   AIJsonParseError,
@@ -6,20 +5,13 @@ import {
   AIModelNotFoundError,
   AINetworkError,
   AIProviderUnavailableError,
-  AIRequestInvalidError,
   AIRateLimitError,
+  AIRequestInvalidError,
   AISchemaValidationError,
   AITimeoutError,
   type AIService,
 } from "@/src/services/ai";
-import { buildCoursePageAnalysisPrompt } from "../prompts/course-page-analysis.prompt";
-import {
-  coursePageAnalysisInputSchema,
-  coursePageAnalysisSchema,
-  supportedCoursePageMimeTypes,
-  type CoursePageAnalysis,
-  type CoursePageAnalysisInput,
-} from "../schemas/course-page-analysis.schema";
+import { z } from "zod";
 import {
   CoursePageAnalysisAIUnavailableError,
   CoursePageAnalysisImageError,
@@ -35,6 +27,14 @@ import {
   CoursePageAnalysisSchemaError,
   CoursePageAnalysisTimeoutError,
 } from "../errors/course-page-analysis.errors";
+import { buildCoursePageAnalysisPrompt } from "../prompts/course-page-analysis.prompt";
+import {
+  coursePageAnalysisInputSchema,
+  coursePageAnalysisSchema,
+  supportedCoursePageMimeTypes,
+  type CoursePageAnalysis,
+  type CoursePageAnalysisInput,
+} from "../schemas/course-page-analysis.schema";
 
 type AnalyzeCoursePageDependencies = {
   aiService: AIService | null | (() => Promise<AIService | null>);

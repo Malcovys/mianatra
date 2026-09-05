@@ -1,12 +1,3 @@
-export { generateCourseRevisionSheet } from "./services/generate-course-revision-sheet.service";
-export type {
-  GenerateCourseRevisionSheetDependencies,
-  GenerateCourseRevisionSheetResult,
-  RevisionSheetCourseData,
-} from "./services/generate-course-revision-sheet.service";
-export { generatedRevisionSheetSchema } from "./schemas/generated-revision-sheet.schema";
-export type { GeneratedRevisionSheet } from "./schemas/generated-revision-sheet.schema";
-export { buildRevisionSheetPrompt } from "./prompts/revision-sheet.prompt";
 export {
   RevisionSheetAINotConfiguredError,
   RevisionSheetAnalysisNotFoundError,
@@ -15,6 +6,15 @@ export {
   RevisionSheetCourseNotReadyError,
   RevisionSheetGenerationError,
   RevisionSheetInvalidOutputError,
-  RevisionSheetPersistenceFailedError,
+  RevisionSheetPersistenceFailedError
 } from "./errors/revision-sheet-generation.errors";
 export type { RevisionSheetGenerationErrorCode } from "./errors/revision-sheet-generation.errors";
+export { buildRevisionSheetPrompt } from "./prompts/revision-sheet.prompt";
+export { generatedRevisionSheetSchema } from "./schemas/generated-revision-sheet.schema";
+export type { GeneratedRevisionSheet } from "./schemas/generated-revision-sheet.schema";
+export { generateCourseRevisionSheet } from "./services/generate-course-revision-sheet.service";
+export type {
+  GenerateCourseRevisionSheetDependencies,
+  GenerateCourseRevisionSheetResult,
+  RevisionSheetCourseData
+} from "./services/generate-course-revision-sheet.service";
