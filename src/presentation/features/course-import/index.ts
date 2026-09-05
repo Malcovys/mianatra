@@ -1,9 +1,7 @@
 export {
   addPages,
   compileCourse,
-  courseImportService,
   createCourseFromPages,
-  createCourseImportService,
   getCourseImportDefaults,
   getOrCreateCourseImportSubject,
   markPageQuality,

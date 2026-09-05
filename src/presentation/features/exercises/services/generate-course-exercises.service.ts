@@ -44,7 +44,7 @@ export type PersistGeneratedExerciseInput = {
   generatedFromWeakness: boolean;
 };
 
-export type GenerateCourseExercisesDependencies = {
+type GenerateCourseExercisesDependencies = {
   aiService: AITextGenerator | null | (() => Promise<AITextGenerator | null>);
   courses: {
     findDetailById: (courseId: string) => Promise<ExerciseCourseData | null>;

@@ -54,7 +54,7 @@ type StudySessionServiceDeps = {
   };
 };
 
-export function createStudySessionService(deps: StudySessionServiceDeps) {
+function createStudySessionService(deps: StudySessionServiceDeps) {
   async function getSessionOrThrow(sessionId: string) {
     const session = await deps.sessions.findById(sessionId);
     if (!session) {
@@ -226,7 +226,7 @@ export async function abandonSession(sessionId: string) {
   return createStudySessionService(await getDeps()).abandonSession(sessionId);
 }
 
-export const studySessionService = {
+const studySessionService = {
   abandonSession,
   completeSession,
   getActiveSession,

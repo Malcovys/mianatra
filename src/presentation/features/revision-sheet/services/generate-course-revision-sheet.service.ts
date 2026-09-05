@@ -22,7 +22,7 @@ export type RevisionSheetCourseData = {
 
 type AITextGenerator = Pick<AIService, "generateStructured">;
 
-export type GenerateCourseRevisionSheetDependencies = {
+type GenerateCourseRevisionSheetDependencies = {
   aiService: AITextGenerator | null | (() => Promise<AITextGenerator | null>);
   courses: {
     findDetailById: (courseId: string) => Promise<RevisionSheetCourseData | null>;

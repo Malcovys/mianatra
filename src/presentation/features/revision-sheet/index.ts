@@ -14,7 +14,6 @@ export { generatedRevisionSheetSchema } from "./schemas/generated-revision-sheet
 export type { GeneratedRevisionSheet } from "./schemas/generated-revision-sheet.schema";
 export { generateCourseRevisionSheet } from "./services/generate-course-revision-sheet.service";
 export type {
-  GenerateCourseRevisionSheetDependencies,
   GenerateCourseRevisionSheetResult,
   RevisionSheetCourseData
 } from "./services/generate-course-revision-sheet.service";

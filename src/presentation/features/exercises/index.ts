@@ -26,7 +26,6 @@ export type { GeneratedExercise, GeneratedExercisesOutput } from "./schemas/gene
 export { generateCourseExercises } from "./services/generate-course-exercises.service";
 export type {
   ExerciseCourseData,
-  GenerateCourseExercisesDependencies,
   GenerateCourseExercisesOptions,
   GenerateCourseExercisesResult,
   PersistGeneratedExerciseInput

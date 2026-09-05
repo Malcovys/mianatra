@@ -45,7 +45,7 @@ type SettingsRepository = {
   remove(key: string): Promise<void>;
 };
 
-export type AISettingsServiceDeps = {
+type AISettingsServiceDeps = {
   settings: SettingsRepository;
   transport?: GeminiMobileTransport;
   fetchFn?: GeminiFetch;
@@ -146,7 +146,7 @@ function configurationErrorCode(error: unknown) {
   return error instanceof Error ? getAIErrorCode(error) : "AI_UNKNOWN_ERROR";
 }
 
-export function createAISettingsService(deps: AISettingsServiceDeps) {
+function createAISettingsService(deps: AISettingsServiceDeps) {
   async function getGeminiApiKey() {
     return normalizeApiKey(await deps.settings.get(AI_SETTING_KEYS.geminiApiKey));
   }
@@ -333,7 +333,7 @@ export async function testGeminiConfiguration() {
   return (await createDefaultService()).testGeminiConfiguration();
 }
 
-export const aiSettingsService = {
+const aiSettingsService = {
   createConfiguredMobileAIService,
   getAIConfiguration,
   getGeminiApiKey,

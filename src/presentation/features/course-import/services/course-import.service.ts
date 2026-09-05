@@ -73,7 +73,7 @@ type CourseImportServiceDeps = {
   };
 };
 
-export function createCourseImportService(deps: CourseImportServiceDeps) {
+function createCourseImportService(deps: CourseImportServiceDeps) {
   async function assertCourseExists(courseId: string) {
     const course = await deps.courses.findById(courseId);
     if (!course) {
@@ -212,4 +212,4 @@ export async function compileCourse(courseId: string) {
   return createCourseImportService(await getDeps()).compileCourse(courseId);
 }
 
-export const courseImportService = { addPages, compileCourse, createCourseFromPages, markPageQuality, removePage, reorderPages, rotatePage };
+const courseImportService = { addPages, compileCourse, createCourseFromPages, markPageQuality, removePage, reorderPages, rotatePage };
