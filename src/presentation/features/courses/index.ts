@@ -1,6 +1,5 @@
 export {
-  archiveCourse, buildRealCourseResults, courseService,
-  createCourseService,
+  archiveCourse, buildRealCourseResults,
   createDraftCourse,
   deleteCourse, emptyCourseResultCounters,
   getCourse,
