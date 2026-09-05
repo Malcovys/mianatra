@@ -7,7 +7,7 @@ export { courses } from "./courses.table";
 export { exerciseAttempts } from "./exercise-attempts.table";
 export { exercises } from "./exercises.table";
 export { recommendations } from "./recommendations.table";
-export * from "./relations";
+export { dbRelations } from "./relations";
 export { revisionSheets } from "./revision-sheets.table";
 export { sessionReports } from "./session-reports.table";
 export { studySessions } from "./study-sessions.table";

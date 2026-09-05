@@ -1,13 +1,6 @@
-import type { Course, CourseDetail } from "@/src/database";
+import type { CourseDetail } from "@/src/database";
 import type { CourseListItem } from "../types/course-list.types";
 import { buildRealCourseResults } from "./course-route-state.service";
-
-type CoursesListViewDeps = {
-  courses: {
-    findAll: () => Promise<Course[]>;
-    findDetailById: (id: string) => Promise<CourseDetail | null>;
-  };
-};
 
 function subjectName(detail: CourseDetail) {
   return detail.subject?.name?.trim() || "Matière inconnue";
@@ -53,20 +46,12 @@ export function buildCourseGradeFilters(items: readonly Pick<CourseListItem, "gr
   return ["Tous", ...Array.from(new Set(grades)).sort((left, right) => left.localeCompare(right))];
 }
 
-export function createCoursesListViewService(dependencies: CoursesListViewDeps) {
-  return {
-    loadCoursesList: async (): Promise<CourseListItem[]> => {
-      const courses = (await dependencies.courses.findAll()).filter((course) => course.status !== "archived");
-      const details = await Promise.all(courses.map((course) => dependencies.courses.findDetailById(course.id)));
-      return details
-        .map((detail) => (detail ? toCourseListItem(detail) : null))
-        .filter((item): item is CourseListItem => item !== null)
-        .sort((left, right) => right.updatedAt.localeCompare(left.updatedAt));
-    },
-  };
-}
-
 export async function loadCoursesList() {
   const { coursesRepository } = await import("@/src/database");
-  return createCoursesListViewService({ courses: coursesRepository }).loadCoursesList();
+  const courses = (await coursesRepository.findAll()).filter((course) => course.status !== "archived");
+  const details = await Promise.all(courses.map((course) => coursesRepository.findDetailById(course.id)));
+  return details
+    .map((detail) => (detail ? toCourseListItem(detail) : null))
+    .filter((item): item is CourseListItem => item !== null)
+    .sort((left, right) => right.updatedAt.localeCompare(left.updatedAt));
 }

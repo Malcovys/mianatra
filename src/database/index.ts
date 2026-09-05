@@ -43,7 +43,6 @@ export {
     exercises,
     recommendations,
     revisionSheets,
-    schemaTables,
     sessionReports,
     studySessions,
     subjects

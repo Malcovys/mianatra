@@ -13,7 +13,7 @@ import { sessionReports } from "./session-reports.table";
 import { studySessions } from "./study-sessions.table";
 import { subjects } from "./subjects.table";
 
-export const schemaTables = {
+const schemaTables = {
   appSettings,
   conceptProgress,
   concepts,

@@ -1,29 +1,13 @@
-import type { Course, CourseDetail, CreateRecommendationInput, Recommendation, StudySession } from "@/src/database";
 import { buildRecommendations, rankRecommendations, type RecommendationContext, type RecommendationDraft } from "../domain";
 
 function sameRecommendation(left: Pick<RecommendationDraft, "courseId" | "conceptId" | "type">, right: Pick<RecommendationDraft, "courseId" | "conceptId" | "type">) {
   return left.type === right.type && left.courseId === right.courseId && left.conceptId === right.conceptId;
 }
 
-type RecommendationServiceDeps = {
-  courses: {
-    findAll: () => Promise<Course[]>;
-    findDetailById: (id: string) => Promise<CourseDetail | null>;
-  };
-  recommendations: {
-    findActive: () => Promise<Recommendation[]>;
-    create: (input: CreateRecommendationInput) => Promise<Recommendation>;
-    complete: (id: string) => Promise<Recommendation>;
-  };
-  sessions: {
-    findActive: () => Promise<StudySession[]>;
-  };
-};
-
-export function createRecommendationService(deps: RecommendationServiceDeps) {
-  async function buildContext(): Promise<RecommendationContext> {
-    const courses = await deps.courses.findAll();
-    const activeSessions = await deps.sessions.findActive();
+async function buildRecommendationContext(): Promise<RecommendationContext> {
+    const { coursesRepository, studySessionsRepository } = await import("@/src/database");
+    const courses = await coursesRepository.findAll();
+    const activeSessions = await studySessionsRepository.findActive();
     const interruptedSessions = activeSessions
       .map((session) => {
         const course = courses.find((row) => row.id === session.courseId);
@@ -32,7 +16,7 @@ export function createRecommendationService(deps: RecommendationServiceDeps) {
       .filter((value): value is { courseId: string; courseTitle: string } => value !== null);
     const weakConcepts: { courseId: string; conceptId: string; conceptName: string }[] = [];
     for (const course of courses) {
-      const detail = await deps.courses.findDetailById(course.id);
+      const detail = await coursesRepository.findDetailById(course.id);
       for (const concept of detail?.concepts ?? []) {
         if (concept.progress?.status === "needs_reinforcement" || (concept.progress !== null && concept.progress.score < 50)) {
           weakConcepts.push({ courseId: course.id, conceptId: concept.id, conceptName: concept.name });
@@ -52,46 +36,35 @@ export function createRecommendationService(deps: RecommendationServiceDeps) {
       recentCourses,
       canCreateNewCourse: courses.length === 0,
     };
-  }
-
-  return {
-    getActiveRecommendations: async () => rankRecommendations(await deps.recommendations.findActive()),
-    getPrimaryRecommendation: async () => rankRecommendations(await deps.recommendations.findActive())[0] ?? null,
-    completeRecommendation: (id: string) => deps.recommendations.complete(id),
-    refreshRecommendations: async () => {
-      const active = await deps.recommendations.findActive();
-      const drafts = rankRecommendations(buildRecommendations(await buildContext()));
-      const created = [];
-      for (const draft of drafts) {
-        if (active.some((recommendation) => sameRecommendation(recommendation, draft))) {
-          continue;
-        }
-        created.push(await deps.recommendations.create(draft));
-      }
-      return rankRecommendations([...active, ...created]);
-    },
-  };
-}
-
-async function getDeps(): Promise<RecommendationServiceDeps> {
-  const repositories = await import("@/src/database");
-  return { courses: repositories.coursesRepository, recommendations: repositories.recommendationsRepository, sessions: repositories.studySessionsRepository };
 }
 
 export async function getActiveRecommendations() {
-  return createRecommendationService(await getDeps()).getActiveRecommendations();
+  const { recommendationsRepository } = await import("@/src/database");
+  return rankRecommendations(await recommendationsRepository.findActive());
 }
 
 export async function getPrimaryRecommendation() {
-  return createRecommendationService(await getDeps()).getPrimaryRecommendation();
+  const { recommendationsRepository } = await import("@/src/database");
+  return rankRecommendations(await recommendationsRepository.findActive())[0] ?? null;
 }
 
 export async function completeRecommendation(id: string) {
-  return createRecommendationService(await getDeps()).completeRecommendation(id);
+  const { recommendationsRepository } = await import("@/src/database");
+  return recommendationsRepository.complete(id);
 }
 
 export async function refreshRecommendations() {
-  return createRecommendationService(await getDeps()).refreshRecommendations();
-}
+  const { recommendationsRepository } = await import("@/src/database");
+  const activeRecommendations = await recommendationsRepository.findActive();
+  const drafts = rankRecommendations(buildRecommendations(await buildRecommendationContext()));
+  const createdRecommendations = [];
 
-export const recommendationService = { completeRecommendation, getActiveRecommendations, getPrimaryRecommendation, refreshRecommendations };
+  for (const draft of drafts) {
+    if (activeRecommendations.some((recommendation) => sameRecommendation(recommendation, draft))) {
+      continue;
+    }
+    createdRecommendations.push(await recommendationsRepository.create(draft));
+  }
+
+  return rankRecommendations([...activeRecommendations, ...createdRecommendations]);
+}

@@ -1,7 +1,12 @@
 import { AppCard, AppText, StatusBadge } from "@/src/presentation/components/shared";
 import { colors, fonts } from "@/src/theme";
 import { View } from "react-native";
-import type { SessionAttempt } from "../types/study-session.types";
+
+type SessionCorrectionAttempt = {
+  answer: string;
+  isCorrect: boolean;
+  usedHint: boolean;
+};
 
 type CorrectionPanelProps = {
   exercise: {
@@ -9,7 +14,7 @@ type CorrectionPanelProps = {
     explanation: string;
     correctionSteps: string[];
   };
-  attempt: SessionAttempt;
+  attempt: SessionCorrectionAttempt;
 };
 
 export function CorrectionPanel({ exercise, attempt }: CorrectionPanelProps) {

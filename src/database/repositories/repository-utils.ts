@@ -1,15 +1,5 @@
 import { createId, nowIso } from "../helpers";
 
-export function createBaseFields() {
-  const now = nowIso();
-
-  return {
-    id: createId(),
-    createdAt: now,
-    updatedAt: now,
-  };
-}
-
 export function createTimedIdFields() {
   return {
     id: createId(),

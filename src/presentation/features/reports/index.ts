@@ -1,1 +1,1 @@
-export { buildSessionReport, createReportService, getSessionReport, reportService } from "./services/report.service";
+export { buildSessionReport, getSessionReport } from "./services/report.service";
