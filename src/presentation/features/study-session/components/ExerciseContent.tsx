@@ -33,7 +33,7 @@ export function ExerciseContent({ exercise }: ExerciseContentProps) {
       </View>
       {exercise.image === "function-graph" ? (
         <Image
-          source={require("../../../../assets/mianatra/image_function_graph_exercise.png")}
+          source={require("../../../../../assets/mianatra/image_function_graph_exercise.png")}
           accessibilityIgnoresInvertColors
           accessibilityLabel="Graphique d'une parabole utilisé pour répondre à l'exercice"
           resizeMode="cover"

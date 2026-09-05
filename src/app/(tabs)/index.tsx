@@ -38,7 +38,7 @@ export default function HomeScreen() {
       <AppScreen contentClassName="gap-5 pb-10">
         <AppCard className="gap-3">
           <AppText variant="subtitle">Chargement de ton accueil…</AppText>
-          <AppText tone="secondary">On récupère ton profil et tes cours enregistrés.</AppText>
+          <AppText tone="secondary">On récupère tes cours enregistrés.</AppText>
         </AppCard>
       </AppScreen>
     );

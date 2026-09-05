@@ -75,11 +75,11 @@ Un script plus détaillé est disponible dans `docs/DEMO.md`.
 
 ## 7. Base de données locale
 
-La base native utilise SQLite via Expo SQLite et Drizzle. Le client unique est dans `src/db/client.ts` et ouvre `mianatra.db` avec `foreign_keys` et WAL activés.
+La base native utilise SQLite via Expo SQLite et Drizzle. Le client unique est dans `src/database/client.ts` et ouvre `mianatra.db` avec `foreign_keys` et WAL activés.
 
-Le schéma métier est modulaire dans `src/db/schema/` et couvre les 14 tables principales : profils, matières, cours, pages, analyses, concepts, fiches de révision, exercices, sessions, tentatives, progression, rapports, recommandations et paramètres.
+Le schéma métier est modulaire dans `src/database/schema/` et couvre les tables principales : matières, cours, pages, analyses, concepts, fiches de révision, exercices, sessions, tentatives, progression, rapports, recommandations et paramètres.
 
-Les migrations Drizzle sont dans `src/db/migrations/`. `src/db/migrations/migrations.js` est le bundle utilisé par Expo/React Native pour charger les fichiers `.sql`. Le web n'importe pas le client SQLite natif et continue d'utiliser les données de démonstration.
+Les migrations Drizzle sont dans `src/database/migrations/`. `src/database/migrations/migrations.js` est le bundle utilisé par Expo/React Native pour charger les fichiers `.sql`.
 
 Commandes utiles :
 

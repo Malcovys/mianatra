@@ -27,7 +27,7 @@ export function RecommendationCard({ course, onContinue }: RecommendationCardPro
           </View>
         </View>
         <Image
-          source={require("../../../assets/mianatra/image_mini_function_graph.png")}
+          source={require("../../../../assets/mianatra/image_mini_function_graph.png")}
           accessibilityLabel="Miniature du graphique de fonction"
           accessibilityIgnoresInvertColors
           className="h-[108px] w-[108px] rotate-3 rounded-2xl border-[3px] border-[#FFFDF8]"

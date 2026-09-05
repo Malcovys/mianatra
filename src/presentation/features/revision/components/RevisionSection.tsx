@@ -9,7 +9,7 @@ type RevisionSectionData = {
 };
 
 const revisionImages: Record<"function-graph", ImageSourcePropType> = {
-  "function-graph": require("../../../../assets/mianatra/image_function_graph_exercise.png"),
+  "function-graph": require("../../../../../assets/mianatra/image_function_graph_exercise.png"),
 };
 
 type RevisionSectionProps = {

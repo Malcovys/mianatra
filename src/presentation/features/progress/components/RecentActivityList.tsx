@@ -1,6 +1,6 @@
-import { AppCard, AppText } from "@/src/components/shared";
+import { AppCard, AppText } from "@/src/presentation/components/shared";
 import type { CourseRecentActivity } from "@/src/presentation/features/courses";
-import { colors, fonts } from "@/s@/src/presentation/components/shared
+import { colors, fonts } from "@/src/theme";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import { View } from "react-native";
 

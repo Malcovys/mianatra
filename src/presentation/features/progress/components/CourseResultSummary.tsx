@@ -1,5 +1,5 @@
-import { AppCard, AppText } from "@/src/components/shared";
-import type { CourseResultCounters@/src/presentation/components/sharedtion/features/courses";
+import { AppCard, AppText } from "@/src/presentation/components/shared";
+import type { CourseResultCounters } from "@/src/presentation/features/courses";
 import { colors, fonts } from "@/src/theme";
 import { View } from "react-native";
 

@@ -1,6 +1,6 @@
 import { db } from "@/src/database/client";
 import { initializeDatabaseConnection, prepareDatabaseForMigrations } from "@/src/database/initialization";
-import migrations from "@/src/db/migrations/migrations";
+import migrations from "@/src/database/migrations/migrations";
 import { AppButton, AppText } from "@/src/presentation/components/shared";
 import { useMigrations } from "drizzle-orm/expo-sqlite/migrator";
 import { useEffect, useState } from "react";
