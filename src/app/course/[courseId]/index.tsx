@@ -1,19 +1,19 @@
 import {
-  AppButton,
-  AppCard,
-  AppScreen,
-  AppText,
-  ProgressBar,
-} from "@/src/components/shared";
-import { useCourseProcessing } from "@/src/features/course-processing";
-import { buildRealCourseResults, emptyCourseResultCounters } from "@/src/features/courses";
+    AppButton,
+    AppCard,
+    AppScreen,
+    AppText,
+    ProgressBar,
+} from "@/src/presentation/components/shared";
+import { useCourseProcessing } from "@/src/presentation/features/course-processing";
+import { buildRealCourseResults, emptyCourseResultCounters } from "@/src/presentation/features/courses";
 import {
-  CourseActionTabs,
-  CourseProgressCard,
-  CourseSummary,
-  CourseTopBar,
-} from "@/src/features/courses/components";
-import { countRealCourseExercises, startRealCourseSession } from "@/src/features/study-session/services/real-session-view.service";
+    CourseActionTabs,
+    CourseProgressCard,
+    CourseSummary,
+    CourseTopBar,
+} from "@/src/presentation/features/courses/components";
+import { countRealCourseExercises, startRealCourseSession } from "@/src/presentation/features/study-session/services/real-session-view.service";
 import { colors, fonts } from "@/src/theme";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import { router, useLocalSearchParams } from "expo-router";

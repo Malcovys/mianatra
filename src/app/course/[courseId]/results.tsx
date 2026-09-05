@@ -1,7 +1,7 @@
-import { AppButton, AppCard, AppScreen, AppText, ProgressBar } from "@/src/components/shared";
-import { loadRealCourseResults, type RealCourseResultsState } from "@/src/features/courses";
-import { CourseProgressRing, CourseTopBar } from "@/src/features/courses/components";
-import { CourseResultSummary, RecentActivityList } from "@/src/features/progress/components";
+import { AppButton, AppCard, AppScreen, AppText, ProgressBar } from "@/src/presentation/components/shared";
+import { loadRealCourseResults, type RealCourseResultsState } from "@/src/presentation/features/courses";
+import { CourseProgressRing, CourseTopBar } from "@/src/presentation/features/courses/components";
+import { CourseResultSummary, RecentActivityList } from "@/src/presentation/features/progress/components";
 import { fonts } from "@/src/theme";
 import { router, useLocalSearchParams } from "expo-router";
 import { useEffect, useState } from "react";

@@ -1,5 +1,5 @@
-import { AppButton, AppCard, AppScreen, AppText, ProgressBar, ScreenHeader, StatusBadge } from "@/src/components/shared";
-import { loadRealReportView, type RealReportView } from "@/src/features/study-session/services/real-session-view.service";
+import { AppButton, AppCard, AppScreen, AppText, ProgressBar, ScreenHeader, StatusBadge } from "@/src/presentation/components/shared";
+import { loadRealReportView, type RealReportView } from "@/src/presentation/features/study-session/services/real-session-view.service";
 import { router, useLocalSearchParams } from "expo-router";
 import { useEffect, useState } from "react";
 

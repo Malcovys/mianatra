@@ -1,12 +1,12 @@
-import { SubjectCard } from "@/src/components/core";
+import { SubjectCard } from "@/src/presentation/components/core";
 import {
   AppButton,
   AppCard,
   AppScreen,
   AppText,
-} from "@/src/components/shared";
-import type { HomeDashboardActiveSession, HomeDashboardSubject } from "@/src/features/home/home-dashboard.types";
-import { useHomeDashboard } from "@/src/features/home/use-home-dashboard";
+} from "@/src/presentation/components/shared";
+import type { HomeDashboardActiveSession, HomeDashboardSubject } from "@/src/presentation/features/home/home-dashboard.types";
+import { useHomeDashboard } from "@/src/presentation/features/home/use-home-dashboard";
 import { colors, fonts } from "@/src/theme";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import { router } from "expo-router";

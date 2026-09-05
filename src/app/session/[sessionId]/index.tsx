@@ -4,14 +4,14 @@ import {
     AppScreen,
     AppText,
     ScreenHeader,
-} from "@/src/components/shared";
-import { ExerciseAnswerControl, ExerciseContent, ExerciseProgress, HintPanel } from "@/src/features/study-session/components";
+} from "@/src/presentation/components/shared";
+import { ExerciseAnswerControl, ExerciseContent, ExerciseProgress, HintPanel } from "@/src/presentation/features/study-session/components";
 import {
     loadRealSessionView,
     submitRealSessionAnswer,
     type RealSessionView,
-} from "@/src/features/study-session/services/real-session-view.service";
-import { canSubmitExerciseAnswer, getAnswerControlKind } from "@/src/features/study-session/utils/session-answer-rendering";
+} from "@/src/presentation/features/study-session/services/real-session-view.service";
+import { canSubmitExerciseAnswer, getAnswerControlKind } from "@/src/presentation/features/study-session/utils/session-answer-rendering";
 import { fonts } from "@/src/theme";
 import { router, useLocalSearchParams } from "expo-router";
 import { useEffect, useState } from "react";

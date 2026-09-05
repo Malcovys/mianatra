@@ -1,6 +1,6 @@
-import { GradeFilter, SubjectCard, type GradeFilterValue } from "@/src/components/core";
-import { AppButton, AppCard, AppScreen, AppText, ScreenHeader } from "@/src/components/shared";
-import { useSubjectsOverview } from "@/src/features/subjects/use-subjects-overview";
+import { GradeFilter, SubjectCard, type GradeFilterValue } from "@/src/presentation/components/core";
+import { AppButton, AppCard, AppScreen, AppText, ScreenHeader } from "@/src/presentation/components/shared";
+import { useSubjectsOverview } from "@/src/presentation/features/subjects/use-subjects-overview";
 import { router } from "expo-router";
 import { useMemo, useState } from "react";
 import { View } from "react-native";

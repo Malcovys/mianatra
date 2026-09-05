@@ -1,29 +1,29 @@
+import type { Subject } from "@/src/db";
+import { AppButton, AppCard, AppScreen, AppText } from "@/src/presentation/components/shared";
+import { Input, InputField } from "@/src/presentation/components/ui/input";
+import {
+    normalizeCourseImportSubjectName,
+    resolveCourseImportSubjectForCreation,
+    resolveInitialCourseImportSubject,
+    shouldReuseCompiledCourse,
+} from "@/src/presentation/features/course-import";
+import { AddPageButton, CoursePageGrid, ImportStepHeader } from "@/src/presentation/features/course-import/components";
+import { compileCourse, getCourseImportDefaults, getOrCreateCourseImportSubject } from "@/src/presentation/features/course-import/services/course-import.service";
+import { expoGalleryImportService } from "@/src/presentation/features/course-import/services/gallery-import.expo";
+import {
+    GalleryImportError,
+    MAX_GALLERY_COURSE_PAGES,
+    moveSelectedCoursePage,
+    removeSelectedCoursePage,
+    type SelectedCoursePage,
+} from "@/src/presentation/features/course-import/services/gallery-import.service";
+import { useCourseProcessing } from "@/src/presentation/features/course-processing";
+import { listSubjects } from "@/src/presentation/features/subjects";
+import { colors, fonts } from "@/src/theme";
+import { router, useLocalSearchParams } from "expo-router";
 import { useEffect, useRef, useState } from "react";
 import { Alert, Pressable, View } from "react-native";
-import { router, useLocalSearchParams } from "expo-router";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { AddPageButton, CoursePageGrid, ImportStepHeader } from "@/src/features/course-import/components";
-import type { Subject } from "@/src/db";
-import { AppButton, AppCard, AppScreen, AppText } from "@/src/components/shared";
-import { Input, InputField } from "@/src/components/ui/input";
-import { compileCourse, getCourseImportDefaults, getOrCreateCourseImportSubject } from "@/src/features/course-import/services/course-import.service";
-import {
-  normalizeCourseImportSubjectName,
-  resolveCourseImportSubjectForCreation,
-  resolveInitialCourseImportSubject,
-  shouldReuseCompiledCourse,
-} from "@/src/features/course-import";
-import { expoGalleryImportService } from "@/src/features/course-import/services/gallery-import.expo";
-import {
-  MAX_GALLERY_COURSE_PAGES,
-  GalleryImportError,
-  moveSelectedCoursePage,
-  removeSelectedCoursePage,
-  type SelectedCoursePage,
-} from "@/src/features/course-import/services/gallery-import.service";
-import { useCourseProcessing } from "@/src/features/course-processing";
-import { listSubjects } from "@/src/features/subjects";
-import { colors, fonts } from "@/src/theme";
 
 type AddCourseStep = 1 | 2 | 3;
 

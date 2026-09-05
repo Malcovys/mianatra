@@ -1,9 +1,9 @@
+import { CourseCard } from "@/src/presentation/components/core";
+import { AppButton, AppCard, AppScreen, AppText, ProgressBar, ScreenHeader } from "@/src/presentation/components/shared";
+import { loadSubjectDetail, type SubjectDetailView } from "@/src/presentation/features/subjects";
+import { router, useFocusEffect, useLocalSearchParams } from "expo-router";
 import { useCallback, useRef, useState } from "react";
 import { View } from "react-native";
-import { router, useFocusEffect, useLocalSearchParams } from "expo-router";
-import { CourseCard } from "@/src/components/core";
-import { AppButton, AppCard, AppScreen, AppText, ProgressBar, ScreenHeader } from "@/src/components/shared";
-import { loadSubjectDetail, type SubjectDetailView } from "@/src/features/subjects";
 
 type SubjectDetailStatus = "loading" | "ready" | "missing" | "error";
 
