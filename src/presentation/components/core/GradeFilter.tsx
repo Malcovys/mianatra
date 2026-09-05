@@ -1,12 +1,10 @@
 import { AppText } from "@/src/presentation/components/shared";
 import { Pressable, View } from "react-native";
 
-export type GradeFilterValue = string;
-
 type GradeFilterProps = {
-  values: GradeFilterValue[];
-  selectedValue: GradeFilterValue;
-  onChange: (value: GradeFilterValue) => void;
+  values: string[];
+  selectedValue: string;
+  onChange: (value: string) => void;
 };
 
 export function GradeFilter({ values, selectedValue, onChange }: GradeFilterProps) {

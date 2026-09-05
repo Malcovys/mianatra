@@ -19,8 +19,7 @@ export function useHomeDashboard() {
         setDashboard(nextDashboard);
         setStatus("ready");
       })
-      .catch((error) => {
-        console.error('[useHomeDashboard]: ', error);
+      .catch(() => {
         setErrorMessage("Impossible de charger ton accueil.");
         setStatus("error");
       });

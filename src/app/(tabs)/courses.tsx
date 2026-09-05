@@ -1,4 +1,4 @@
-import { GradeFilter, SubjectCard, type GradeFilterValue } from "@/src/presentation/components/core";
+import { GradeFilter, SubjectCard } from "@/src/presentation/components/core";
 import { AppButton, AppCard, AppScreen, AppText, ScreenHeader } from "@/src/presentation/components/shared";
 import { useSubjectsOverview } from "@/src/presentation/features/subjects/use-subjects-overview";
 import { router } from "expo-router";
@@ -6,16 +6,14 @@ import { useMemo, useState } from "react";
 import { View } from "react-native";
 
 export default function CoursesScreen() {
-  const { errorMessage, grades, items, reload, status } = useSubjectsOverview();
-  const [selectedFilter, setSelectedFilter] = useState<GradeFilterValue>("Tous");
-  const filterValues: GradeFilterValue[] = grades;
-  const effectiveSelectedFilter = filterValues.includes(selectedFilter) ? selectedFilter : "Tous";
+  const { errorMessage, grades, subjects, reload, status } = useSubjectsOverview();
+
+  const [selectedFilter, setSelectedFilter] = useState("Tous");
   const filteredSubjects = useMemo(
-    () =>
-      effectiveSelectedFilter === "Tous"
-        ? items
-        : items.filter((subject) => subject.grades.includes(effectiveSelectedFilter)),
-    [effectiveSelectedFilter, items],
+    () => selectedFilter === "Tous"
+      ? subjects
+      : subjects.filter((subject) => subject.grades.includes(selectedFilter)),
+    [selectedFilter, subjects],
   );
 
   function openSubject(subjectId: string) {
@@ -29,11 +27,13 @@ export default function CoursesScreen() {
     <AppScreen contentClassName="gap-5 pb-10">
       <ScreenHeader title="Mes cours" subtitle="Tous tes cours au même endroit." />
 
-      <GradeFilter
-        values={filterValues}
-        selectedValue={effectiveSelectedFilter}
-        onChange={setSelectedFilter}
-      />
+      {grades.length > 1 ? (
+        <GradeFilter
+          values={grades}
+          selectedValue={selectedFilter}
+          onChange={setSelectedFilter}
+        />
+      ) : null}
 
       <View className="gap-3">
         {status === "loading" ? (
@@ -51,7 +51,7 @@ export default function CoursesScreen() {
           </AppCard>
         ) : null}
 
-        {status === "ready" && items.length === 0 ? (
+        {status === "ready" && subjects.length === 0 ? (
           <AppCard
             className="gap-2 rounded-xl p-4"
             style={{
@@ -71,7 +71,7 @@ export default function CoursesScreen() {
           </AppCard>
         ) : null}
 
-        {status === "ready" && items.length > 0 && filteredSubjects.length === 0 ? (
+        {status === "ready" && subjects.length > 0 && filteredSubjects.length === 0 ? (
           <AppCard className="gap-3">
             <AppText variant="subtitle">Aucun cours pour ce filtre.</AppText>
             <AppText tone="secondary">Choisis une autre classe ou ajoute un nouveau cours.</AppText>
