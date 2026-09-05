@@ -74,13 +74,6 @@ export default function HomeScreen() {
             Prête pour une petite révision ?
           </AppText>
         </View>
-        <Pressable
-          accessibilityRole="button"
-          accessibilityLabel="Notifications"
-          className="h-9 w-9 items-center justify-center rounded-full active:opacity-80"
-        >
-          <FontAwesome5 name="bell" size={18} color={colors.textPrimary} />
-        </Pressable>
       </View>
 
       <RevisionReminder activeSession={activeSession} subject={reminderSubject} />
