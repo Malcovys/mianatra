@@ -604,7 +604,7 @@ export async function generateCourseExercises(
   }
 }
 
-export function createGenerateCourseExercisesService(dependencies: GenerateCourseExercisesDependencies) {
+function createGenerateCourseExercisesService(dependencies: GenerateCourseExercisesDependencies) {
   return {
     generateCourseExercises: (courseId: string, options: GenerateCourseExercisesOptions = {}) =>
       generateCourseExercises(courseId, options, dependencies),

@@ -19,7 +19,7 @@ import { analyzeCoursePagesInputSchema, multiPageCourseAnalysisSchema, type Anal
 import type { CoursePageAnalysisInput } from "../schemas/course-page-analysis.schema";
 import type { AnalyzeSinglePage, PageAnalysisResult } from "../types/multi-page-course-analysis.types";
 
-export type AnalyzeCoursePagesDependencies = {
+type AnalyzeCoursePagesDependencies = {
   analyzeSinglePage: AnalyzeSinglePage;
   onPageDone?: (result: PageAnalysisResult) => void;
   onPageAttempt?: (input: { pageIndex: number; attemptNumber: number; maxAttempts: number; retryReason?: string | null }) => void;
@@ -256,7 +256,7 @@ export async function analyzeCoursePages(
   }
 }
 
-export function createAnalyzeCoursePagesService(dependencies: AnalyzeCoursePagesDependencies) {
+function createAnalyzeCoursePagesService(dependencies: AnalyzeCoursePagesDependencies) {
   return {
     analyzeCoursePages: (input: AnalyzeCoursePagesInput) => analyzeCoursePages(input, dependencies),
   };

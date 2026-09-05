@@ -36,7 +36,7 @@ import {
   CoursePageAnalysisTimeoutError,
 } from "../errors/course-page-analysis.errors";
 
-export type AnalyzeCoursePageDependencies = {
+type AnalyzeCoursePageDependencies = {
   aiService: AIService | null | (() => Promise<AIService | null>);
 };
 
@@ -138,7 +138,7 @@ export async function analyzeCoursePage(
   }
 }
 
-export function createAnalyzeCoursePageService(dependencies: AnalyzeCoursePageDependencies) {
+function createAnalyzeCoursePageService(dependencies: AnalyzeCoursePageDependencies) {
   return {
     analyzeCoursePage: (input: CoursePageAnalysisInput) => analyzeCoursePage(input, dependencies),
   };

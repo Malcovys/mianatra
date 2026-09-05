@@ -1,4 +1,4 @@
-export { generateCourseRevisionSheet, createGenerateCourseRevisionSheetService } from "./services/generate-course-revision-sheet.service";
+export { generateCourseRevisionSheet } from "./services/generate-course-revision-sheet.service";
 export type {
   GenerateCourseRevisionSheetDependencies,
   GenerateCourseRevisionSheetResult,

@@ -8,7 +8,7 @@ export {
   validateExerciseAnswer,
 } from "./domain";
 export type { AnswerValidationResult, AnswerValidationStatus, MistakeType } from "./domain";
-export { generateCourseExercises, createGenerateCourseExercisesService } from "./services/generate-course-exercises.service";
+export { generateCourseExercises } from "./services/generate-course-exercises.service";
 export type {
   ExerciseCourseData,
   GenerateCourseExercisesDependencies,

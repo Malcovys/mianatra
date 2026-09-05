@@ -1,14 +1,11 @@
-export { analyzeCoursePage, createAnalyzeCoursePageService } from "./services/analyze-course-page.service";
-export type { AnalyzeCoursePageDependencies } from "./services/analyze-course-page.service";
+export { analyzeCoursePage } from "./services/analyze-course-page.service";
 export {
   AllCoursePagesAnalysisFailedError,
   DuplicatePageIndexError,
   NoCoursePagesProvidedError,
   analyzeCoursePages,
-  createAnalyzeCoursePagesService,
 } from "./services/analyze-course-pages.service";
-export type { AnalyzeCoursePagesDependencies } from "./services/analyze-course-pages.service";
-export { createPersistCourseAnalysisService, persistCourseAnalysis } from "./services/persist-course-analysis.service";
+export { persistCourseAnalysis } from "./services/persist-course-analysis.service";
 export type {
   PersistCourseAnalysisConceptInput,
   PersistCourseAnalysisInput,

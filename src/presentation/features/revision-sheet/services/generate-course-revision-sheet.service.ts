@@ -135,7 +135,7 @@ export async function generateCourseRevisionSheet(
   }
 }
 
-export function createGenerateCourseRevisionSheetService(dependencies: GenerateCourseRevisionSheetDependencies) {
+function createGenerateCourseRevisionSheetService(dependencies: GenerateCourseRevisionSheetDependencies) {
   return {
     generateCourseRevisionSheet: (courseId: string) => generateCourseRevisionSheet(courseId, dependencies),
   };

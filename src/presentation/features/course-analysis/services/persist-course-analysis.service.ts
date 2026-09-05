@@ -172,7 +172,7 @@ export async function persistCourseAnalysis(
   }
 }
 
-export function createPersistCourseAnalysisService(dependencies: PersistCourseAnalysisDeps) {
+function createPersistCourseAnalysisService(dependencies: PersistCourseAnalysisDeps) {
   return {
     persistCourseAnalysis: (input: PersistCourseAnalysisInput) => persistCourseAnalysis(input, dependencies),
   };
