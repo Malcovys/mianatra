@@ -1,4 +1,4 @@
-import type { Course, CourseDetail, CourseStatus, CreateCourseInput, Subject, UpdateCourseInput } from "@/src/db";
+import type { Course, CourseDetail, CourseStatus, CreateCourseInput, Subject, UpdateCourseInput } from "@/src/database";
 import { CourseNotFoundError, SubjectNotFoundError } from "@/src/presentation/features/shared";
 
 const courseStatuses: CourseStatus[] = ["draft", "processing", "ready", "archived"];
@@ -129,7 +129,7 @@ export function createCourseService(deps: CourseServiceDeps) {
 }
 
 async function getDeps(): Promise<CourseServiceDeps> {
-  const repositories = await import("@/src/db");
+  const repositories = await import("@/src/database");
   return { courses: repositories.coursesRepository, subjects: repositories.subjectsRepository };
 }
 

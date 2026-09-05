@@ -1,4 +1,4 @@
-import type { ConceptProgress, ConceptProgressStatus } from "@/src/db";
+import type { ConceptProgress, ConceptProgressStatus } from "@/src/database";
 
 export type ProgressConceptInput = {
   id: string;

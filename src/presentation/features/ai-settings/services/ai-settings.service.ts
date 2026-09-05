@@ -1,21 +1,21 @@
 import {
-  AIAuthenticationError,
-  AIError,
-  AIInvalidResponseError,
-  AIModelNotFoundError,
-  AIProviderUnavailableError,
-  AIRateLimitError,
-  AITimeoutError,
-  AIService,
-  ALLOWED_GEMMA_MODELS,
-  DEFAULT_GEMINI_TIMEOUT_MS,
-  DEFAULT_GEMMA_MODEL,
-  GeminiMobileProvider,
-  getAIErrorCode,
-  type AILogger,
-  type GemmaModel,
-  type GeminiFetch,
-  type GeminiMobileTransport,
+    AIAuthenticationError,
+    AIError,
+    AIInvalidResponseError,
+    AIModelNotFoundError,
+    AIProviderUnavailableError,
+    AIRateLimitError,
+    AIService,
+    AITimeoutError,
+    ALLOWED_GEMMA_MODELS,
+    DEFAULT_GEMINI_TIMEOUT_MS,
+    DEFAULT_GEMMA_MODEL,
+    GeminiMobileProvider,
+    getAIErrorCode,
+    type AILogger,
+    type GeminiFetch,
+    type GeminiMobileTransport,
+    type GemmaModel,
 } from "@/src/services/ai";
 
 export const AI_SETTING_KEYS = {
@@ -286,7 +286,7 @@ export function createAISettingsService(deps: AISettingsServiceDeps) {
 }
 
 async function getRepository() {
-  return (await import("@/src/db")).settingsRepository;
+  return (await import("@/src/database")).settingsRepository;
 }
 
 async function createDefaultService() {

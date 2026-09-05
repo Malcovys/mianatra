@@ -1,18 +1,18 @@
-import type { Concept, Course, CourseAnalysis, Exercise, Subject } from "@/src/db";
-import type { AIStructuredResult, AIService } from "@/src/services/ai/ai.service";
-import { AIJsonParseError, AIJsonTruncatedError, AISchemaValidationError } from "@/src/services/ai/ai.errors";
+import type { Concept, Course, CourseAnalysis, Exercise, Subject } from "@/src/database";
 import type { AITextResponse } from "@/src/services/ai";
+import { AIJsonParseError, AIJsonTruncatedError, AISchemaValidationError } from "@/src/services/ai/ai.errors";
+import type { AIService, AIStructuredResult } from "@/src/services/ai/ai.service";
+import {
+    ExerciseGenerationAINotConfiguredError,
+    ExerciseGenerationAnalysisNotFoundError,
+    ExerciseGenerationConceptsNotFoundError,
+    ExerciseGenerationCourseNotFoundError,
+    ExerciseGenerationCourseNotReadyError,
+    ExerciseGenerationInvalidOutputError,
+    ExerciseGenerationPersistenceFailedError,
+} from "../errors/exercise-generation.errors";
 import { buildCourseExercisesPrompt } from "../prompts/course-exercises.prompt";
 import { exerciseGenerationSchema, type GeneratedExercise } from "../schemas/generated-exercises.schema";
-import {
-  ExerciseGenerationAINotConfiguredError,
-  ExerciseGenerationAnalysisNotFoundError,
-  ExerciseGenerationConceptsNotFoundError,
-  ExerciseGenerationCourseNotFoundError,
-  ExerciseGenerationCourseNotReadyError,
-  ExerciseGenerationInvalidOutputError,
-  ExerciseGenerationPersistenceFailedError,
-} from "../errors/exercise-generation.errors";
 
 export type ExerciseCourseData = {
   course: Course;

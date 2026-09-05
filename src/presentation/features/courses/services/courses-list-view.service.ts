@@ -1,6 +1,6 @@
-import type { Course, CourseDetail } from "@/src/db";
-import { buildRealCourseResults } from "./course-route-state.service";
+import type { Course, CourseDetail } from "@/src/database";
 import type { CourseListItem } from "../types/course-list.types";
+import { buildRealCourseResults } from "./course-route-state.service";
 
 type CoursesListViewDeps = {
   courses: {
@@ -67,6 +67,6 @@ export function createCoursesListViewService(dependencies: CoursesListViewDeps) 
 }
 
 export async function loadCoursesList() {
-  const { coursesRepository } = await import("@/src/db");
+  const { coursesRepository } = await import("@/src/database");
   return createCoursesListViewService({ courses: coursesRepository }).loadCoursesList();
 }

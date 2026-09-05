@@ -1,4 +1,4 @@
-import type { Course, CourseDetail, CreateRecommendationInput, Recommendation, StudySession } from "@/src/db";
+import type { Course, CourseDetail, CreateRecommendationInput, Recommendation, StudySession } from "@/src/database";
 import { buildRecommendations, rankRecommendations, type RecommendationContext, type RecommendationDraft } from "../domain";
 
 function sameRecommendation(left: Pick<RecommendationDraft, "courseId" | "conceptId" | "type">, right: Pick<RecommendationDraft, "courseId" | "conceptId" | "type">) {
@@ -74,7 +74,7 @@ export function createRecommendationService(deps: RecommendationServiceDeps) {
 }
 
 async function getDeps(): Promise<RecommendationServiceDeps> {
-  const repositories = await import("@/src/db");
+  const repositories = await import("@/src/database");
   return { courses: repositories.coursesRepository, recommendations: repositories.recommendationsRepository, sessions: repositories.studySessionsRepository };
 }
 

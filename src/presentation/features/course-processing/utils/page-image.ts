@@ -1,4 +1,4 @@
-import type { CoursePage } from "@/src/db";
+import type { CoursePage } from "@/src/database";
 
 const MAX_IMAGE_SIDE = 2048;
 const JPEG_QUALITY = 0.8;

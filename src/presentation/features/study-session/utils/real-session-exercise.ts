@@ -1,4 +1,4 @@
-import type { Exercise } from "@/src/db";
+import type { Exercise } from "@/src/database";
 
 export type RealSessionExercise = {
   id: string;

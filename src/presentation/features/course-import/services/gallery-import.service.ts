@@ -1,4 +1,4 @@
-import type { Course, CoursePage } from "@/src/db";
+import type { Course, CoursePage } from "@/src/database";
 import type { CourseFromPagesInput, ImportPageInput } from "./course-import.service";
 
 export const MAX_GALLERY_COURSE_PAGES = 5;

@@ -1,4 +1,4 @@
-import type { ConceptProgressStatus } from "@/src/db";
+import type { ConceptProgressStatus } from "@/src/database";
 
 export function determineConceptStatus(attemptsCount: number, score: number): ConceptProgressStatus {
   if (attemptsCount === 0) {

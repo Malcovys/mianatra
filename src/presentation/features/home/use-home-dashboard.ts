@@ -53,7 +53,7 @@ export function useHomeDashboard() {
 
 
 export async function loadHomeDashboard() {
-  const { coursesRepository, exercisesRepository, studySessionsRepository } = await import("@/src/db");
+  const { coursesRepository, exercisesRepository, studySessionsRepository } = await import("@/src/database");
   const [subjects, activeSessions] = await Promise.all([
     loadSubjectOverviews(),
     studySessionsRepository.findActive(),

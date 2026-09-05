@@ -1,5 +1,5 @@
-import { db } from "@/src/db/client";
-import { initializeDatabaseConnection, prepareDatabaseForMigrations } from "@/src/db/initialization";
+import { db } from "@/src/database/client";
+import { initializeDatabaseConnection, prepareDatabaseForMigrations } from "@/src/database/initialization";
 import migrations from "@/src/db/migrations/migrations";
 import { AppButton, AppText } from "@/src/presentation/components/shared";
 import { useMigrations } from "drizzle-orm/expo-sqlite/migrator";

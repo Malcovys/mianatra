@@ -1,4 +1,4 @@
-import type { Concept, CourseAnalysis, CourseDetail, CoursePage, Exercise, RevisionSheet } from "@/src/db";
+import type { Concept, CourseAnalysis, CourseDetail, CoursePage, Exercise, RevisionSheet } from "@/src/database";
 import type { AnalyzeCoursePagesInput, MultiPageCourseAnalysis, PageAnalysisResult } from "@/src/presentation/features/course-analysis";
 import { AllCoursePagesAnalysisFailedError } from "@/src/presentation/features/course-analysis";
 import { ExerciseGenerationInvalidOutputError } from "@/src/presentation/features/exercises";

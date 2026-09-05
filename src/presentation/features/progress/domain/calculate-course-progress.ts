@@ -1,4 +1,4 @@
-import type { ConceptProgress } from "@/src/db";
+import type { ConceptProgress } from "@/src/database";
 import { buildCourseProgressSummary, type ProgressConceptInput } from "./course-progress-summary";
 
 export function calculateCourseProgress(concepts: readonly ProgressConceptInput[] | readonly Pick<ConceptProgress, "score">[]) {

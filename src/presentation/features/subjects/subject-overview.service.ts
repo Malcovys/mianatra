@@ -1,4 +1,4 @@
-import type { Course, CourseDetail, Subject } from "@/src/db";
+import type { Course, CourseDetail, Subject } from "@/src/database";
 import type { CourseListItem } from "@/src/presentation/features/courses";
 import { buildRealCourseResults } from "@/src/presentation/features/courses/services/course-route-state.service";
 import { buildCourseProgressSummary } from "@/src/presentation/features/progress/domain";
@@ -93,7 +93,7 @@ async function loadNonArchivedCourseDetails(courses: Course[], findDetailById: (
   }
 
 export async function loadSubjectOverviews(): Promise<SubjectOverviewItem[]> {
-  const { subjectsRepository, coursesRepository } = await import("@/src/db");
+  const { subjectsRepository, coursesRepository } = await import("@/src/database");
   const [subjects, allCourses] = await Promise.all([subjectsRepository.findAll(), coursesRepository.findAll()]);
   const { activeCourses, detailsByCourseId } = await loadNonArchivedCourseDetails(allCourses, coursesRepository.findDetailById);
 
@@ -111,7 +111,7 @@ export async function loadSubjectOverviews(): Promise<SubjectOverviewItem[]> {
 }
 
 export async function loadSubjectDetail(subjectId: string): Promise<SubjectDetailView | null> {
-  const { subjectsRepository, coursesRepository } = await import("@/src/db");
+  const { subjectsRepository, coursesRepository } = await import("@/src/database");
   const subject = await subjectsRepository.findById(subjectId);
   if (!subject) return null;
 

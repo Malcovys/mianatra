@@ -1,4 +1,4 @@
-import type { Subject } from "@/src/db";
+import type { Subject } from "@/src/database";
 import { AppButton, AppCard, AppScreen, AppText } from "@/src/presentation/components/shared";
 import { Input, InputField } from "@/src/presentation/components/ui/input";
 import {

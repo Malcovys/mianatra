@@ -10,7 +10,7 @@ function logExerciseGeneration(event: string, payload: Record<string, unknown>) 
 }
 
 export async function createDefaultCourseProcessingDeps(): Promise<CourseProcessingDeps> {
-  const repositories = await import("@/src/db");
+  const repositories = await import("@/src/database");
 
   return {
     courses: repositories.coursesRepository,

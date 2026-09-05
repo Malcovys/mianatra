@@ -1,4 +1,4 @@
-import type { Concept, ConceptProgress, Exercise, ExerciseAttempt, UpsertConceptProgressInput } from "@/src/db";
+import type { Concept, ConceptProgress, Exercise, ExerciseAttempt, UpsertConceptProgressInput } from "@/src/database";
 import { ExerciseNotFoundError } from "@/src/presentation/features/shared";
 import { calculateConceptScore, calculateCourseProgress as calculateCourseProgressValue, determineConceptStatus } from "../domain";
 
@@ -72,7 +72,7 @@ export function createProgressService(deps: ProgressServiceDeps) {
 }
 
 async function getDeps(): Promise<ProgressServiceDeps> {
-  const repositories = await import("@/src/db");
+  const repositories = await import("@/src/database");
   return {
     attempts: repositories.attemptsRepository,
     concepts: repositories.conceptsRepository,

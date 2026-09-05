@@ -1,4 +1,4 @@
-import type { Recommendation, RecommendationType } from "@/src/db";
+import type { Recommendation, RecommendationType } from "@/src/database";
 
 export type RecommendationDraft = {
   courseId: string | null;

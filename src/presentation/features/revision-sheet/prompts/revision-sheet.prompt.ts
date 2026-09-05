@@ -1,4 +1,4 @@
-import type { Concept, Course, CourseAnalysis, Subject } from "@/src/db";
+import type { Concept, Course, CourseAnalysis, Subject } from "@/src/database";
 
 type BuildRevisionSheetPromptInput = {
   course: Course;

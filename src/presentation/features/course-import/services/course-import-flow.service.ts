@@ -1,4 +1,4 @@
-import type { Subject } from "@/src/db";
+import type { Subject } from "@/src/database";
 
 export type CourseImportSubjectSelection = {
   subjectName: string;

@@ -1,4 +1,4 @@
-import type { Exercise } from "@/src/db";
+import type { Exercise } from "@/src/database";
 import { InvalidAnswerError } from "@/src/presentation/features/shared";
 
 export type AnswerValidationStatus = "correct" | "incorrect" | "requires_ai_review";

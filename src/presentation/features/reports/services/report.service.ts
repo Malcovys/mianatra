@@ -1,4 +1,4 @@
-import type { CreateSessionReportInput, Exercise, ExerciseAttempt, SessionReport, StudySession } from "@/src/db";
+import type { CreateSessionReportInput, Exercise, ExerciseAttempt, SessionReport, StudySession } from "@/src/database";
 import { SessionNotFoundError } from "@/src/presentation/features/shared";
 
 function buildSummary(correct: number, total: number) {
@@ -92,7 +92,7 @@ export function createReportService(deps: ReportServiceDeps) {
 }
 
 async function getDeps(): Promise<ReportServiceDeps> {
-  const repositories = await import("@/src/db");
+  const repositories = await import("@/src/database");
   return {
     attempts: repositories.attemptsRepository,
     exercises: repositories.exercisesRepository,
