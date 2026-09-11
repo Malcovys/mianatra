@@ -4,6 +4,7 @@ import {
   AppCard,
   AppScreen,
   AppText,
+  EmptyStateCard,
 } from "@/src/presentation/components/shared";
 import type { HomeDashboardActiveSession, HomeDashboardSubject } from "@/src/presentation/features/home/home-dashboard.types";
 import { useHomeDashboard } from "@/src/presentation/features/home/use-home-dashboard";
@@ -121,23 +122,10 @@ export default function HomeScreen() {
             />
           ))
         ) : (
-          <AppCard
-            className="gap-2 rounded-xl p-4"
-            style={{
-              shadowColor: "#6E442A",
-              shadowOffset: { width: 0, height: 4 },
-              shadowOpacity: 0.06,
-              shadowRadius: 10,
-              elevation: 2,
-            }}
-          >
-            <AppText variant="label" className="text-[16px] leading-5">
-              Aucun cours pour le moment
-            </AppText>
-            <AppText tone="secondary" className="text-[14px] leading-5">
-              Ajoute un cours depuis ta galerie pour le retrouver ici.
-            </AppText>
-          </AppCard>
+          <EmptyStateCard
+            title="Aucun cours pour le moment"
+            description="Ajoute un cours depuis ta galerie pour le retrouver ici."
+          />
         )}
       </View>
 

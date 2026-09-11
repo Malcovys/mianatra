@@ -3,8 +3,8 @@ import { db } from "../client";
 import { createId, nowIso } from "../helpers";
 import { conceptProgress, exerciseAttempts, exercises, studySessions } from "../schema";
 import type { ConceptProgress, ExerciseAttempt, NewExerciseAttempt, StudySession } from "../types";
-import { assertInteger, assertNonEmpty, assertNonNegative, firstOrThrow } from "./repository-utils";
 import { type UpsertConceptProgressInput, validateProgressInput } from "./progress.repository";
+import { assertInteger, assertNonEmpty, assertNonNegative, firstOrThrow } from "./repository-utils";
 
 export type CreateAttemptInput = Omit<NewExerciseAttempt, "id" | "createdAt">;
 export type SubmitAttemptWithProgressInput = {
@@ -68,26 +68,18 @@ async function submitWithProgress(input: SubmitAttemptWithProgressInput): Promis
       "Unable to create exercise attempt.",
     );
     const progressInput = { ...input.progress.input, lastPracticedAt: attempt.createdAt };
-    const existingProgress =
-      tx.select().from(conceptProgress).where(eq(conceptProgress.conceptId, input.progress.conceptId)).get() ?? null;
-    const progress = existingProgress
-      ? firstOrThrow(
-          tx
-            .update(conceptProgress)
-            .set({ ...progressInput, updatedAt: now })
-            .where(eq(conceptProgress.conceptId, input.progress.conceptId))
-            .returning()
-            .all(),
-          "Concept progress not found.",
-        )
-      : firstOrThrow(
-          tx
-            .insert(conceptProgress)
-            .values({ conceptId: input.progress.conceptId, updatedAt: now, ...progressInput })
-            .returning()
-            .all(),
-          "Unable to create concept progress.",
-        );
+    const progress = firstOrThrow(
+      tx
+        .insert(conceptProgress)
+        .values({ conceptId: input.progress.conceptId, updatedAt: now, ...progressInput })
+        .onConflictDoUpdate({
+          target: conceptProgress.conceptId,
+          set: { ...progressInput, updatedAt: now },
+        })
+        .returning()
+        .all(),
+      "Unable to upsert concept progress.",
+    );
     const session = input.sessionIndex
       ? firstOrThrow(
           tx

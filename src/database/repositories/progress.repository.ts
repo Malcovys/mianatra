@@ -49,19 +49,19 @@ async function findAllByCourse(courseId: string): Promise<ConceptProgress[]> {
 async function upsert(conceptId: string, input: UpsertConceptProgressInput): Promise<ConceptProgress> {
   assertNonEmpty(conceptId, "conceptId");
   validateProgressInput(input);
-  const existing = await findByConcept(conceptId);
   const updatedAt = nowIso();
 
-  if (!existing) {
-    return firstOrThrow(
-      db.insert(conceptProgress).values({ conceptId, updatedAt, ...input }).returning().all(),
-      "Unable to create concept progress.",
-    );
-  }
-
   return firstOrThrow(
-    db.update(conceptProgress).set({ ...input, updatedAt }).where(eq(conceptProgress.conceptId, conceptId)).returning().all(),
-    "Concept progress not found.",
+    db
+      .insert(conceptProgress)
+      .values({ conceptId, updatedAt, ...input })
+      .onConflictDoUpdate({
+        target: conceptProgress.conceptId,
+        set: { ...input, updatedAt },
+      })
+      .returning()
+      .all(),
+    "Unable to upsert concept progress.",
   );
 }
 

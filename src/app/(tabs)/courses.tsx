@@ -1,5 +1,12 @@
 import { GradeFilter, SubjectCard } from "@/src/presentation/components/core";
-import { AppButton, AppCard, AppScreen, AppText, ScreenHeader } from "@/src/presentation/components/shared";
+import {
+  AppButton,
+  AppCard,
+  AppScreen,
+  AppText,
+  EmptyStateCard,
+  ScreenHeader,
+} from "@/src/presentation/components/shared";
 import { useSubjectsOverview } from "@/src/presentation/features/subjects/use-subjects-overview";
 import { router } from "expo-router";
 import { useMemo, useState } from "react";
@@ -52,23 +59,10 @@ export default function CoursesScreen() {
         ) : null}
 
         {status === "ready" && subjects.length === 0 ? (
-          <AppCard
-            className="gap-2 rounded-xl p-4"
-            style={{
-              shadowColor: "#6E442A",
-              shadowOffset: { width: 0, height: 4 },
-              shadowOpacity: 0.06,
-              shadowRadius: 10,
-              elevation: 2,
-            }}
-          >
-            <AppText variant="label" className="text-[16px] leading-5">
-              Aucun cours pour le moment
-            </AppText>
-            <AppText tone="secondary" className="text-[14px] leading-5">
-              Ajoute un cours depuis ta galerie pour le retrouver ici.
-            </AppText>
-          </AppCard>
+          <EmptyStateCard
+            title="Aucun cours pour le moment"
+            description="Ajoute un cours depuis ta galerie pour le retrouver ici."
+          />
         ) : null}
 
         {status === "ready" && subjects.length > 0 && filteredSubjects.length === 0 ? (
