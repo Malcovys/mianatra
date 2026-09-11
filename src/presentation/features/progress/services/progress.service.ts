@@ -1,9 +1,9 @@
 import {
-  attemptsRepository,
-  conceptsRepository,
-  exercisesRepository,
-  progressRepository,
-  type ExerciseAttempt,
+    attemptsRepository,
+    conceptsRepository,
+    exercisesRepository,
+    progressRepository,
+    type ExerciseAttempt,
 } from "@/src/database";
 import { ExerciseNotFoundError } from "@/src/presentation/features/shared";
 import { calculateConceptScore, calculateCourseProgress as calculateCourseProgressValue, determineConceptStatus } from "../domain";

@@ -1,20 +1,20 @@
+import { settingsRepository } from "@/src/database";
 import {
-    AIAuthenticationError,
-    AIError,
-    AIInvalidResponseError,
-    AIModelNotFoundError,
-    AIProviderUnavailableError,
-    AIRateLimitError,
-    AIService,
-    AITimeoutError,
-    ALLOWED_GEMMA_MODELS,
-    DEFAULT_GEMINI_TIMEOUT_MS,
-    DEFAULT_GEMMA_MODEL,
-    GeminiMobileProvider,
-    getAIErrorCode,
-    type GemmaModel,
+  AIAuthenticationError,
+  AIError,
+  AIInvalidResponseError,
+  AIModelNotFoundError,
+  AIProviderUnavailableError,
+  AIRateLimitError,
+  AIService,
+  AITimeoutError,
+  ALLOWED_GEMMA_MODELS,
+  DEFAULT_GEMINI_TIMEOUT_MS,
+  DEFAULT_GEMMA_MODEL,
+  GeminiMobileProvider,
+  getAIErrorCode,
+  type GemmaModel,
 } from "@/src/services/ai";
-  import { settingsRepository } from "@/src/database";
 
 export const AI_SETTING_KEYS = {
   geminiApiKey: "gemini_api_key",

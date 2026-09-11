@@ -1,8 +1,8 @@
 import {
-  coursesRepository,
-  subjectsRepository,
-  type CreateSubjectInput,
-  type UpdateSubjectInput,
+    coursesRepository,
+    subjectsRepository,
+    type CreateSubjectInput,
+    type UpdateSubjectInput,
 } from "@/src/database";
 import { DuplicateSubjectNameError, SubjectInUseError, SubjectNotFoundError } from "@/src/presentation/features/shared";
 

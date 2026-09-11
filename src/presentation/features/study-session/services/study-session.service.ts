@@ -14,12 +14,12 @@ import {
 import { classifyMistake, validateExerciseAnswer } from "@/src/presentation/features/exercises";
 import { calculateConceptScore, determineConceptStatus } from "@/src/presentation/features/progress";
 import {
-    CourseNotFoundError,
-    ExerciseNotFoundError,
-    InvalidAnswerError,
-    InvalidSessionStateError,
-    SessionAlreadyCompletedError,
-    SessionNotFoundError,
+  CourseNotFoundError,
+  ExerciseNotFoundError,
+  InvalidAnswerError,
+  InvalidSessionStateError,
+  SessionAlreadyCompletedError,
+  SessionNotFoundError,
 } from "@/src/presentation/features/shared";
 
 export type StartSessionInput = {
