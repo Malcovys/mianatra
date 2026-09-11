@@ -151,9 +151,11 @@ function createCourseImportService(deps: CourseImportServiceDeps) {
   };
 }
 
-async function getDeps(): Promise<CourseImportServiceDeps> {
-  return { courses: coursesRepository, pages: pagesRepository, subjects: subjectsRepository };
-}
+const courseImportService = createCourseImportService({
+  courses: coursesRepository,
+  pages: pagesRepository,
+  subjects: subjectsRepository,
+});
 
 export async function getCourseImportDefaults() {
   const subjects = await subjectsRepository.findAll();
@@ -193,29 +195,29 @@ export async function getOrCreateCourseImportSubject(name: string) {
 }
 
 export async function createCourseFromPages(input: CourseFromPagesInput) {
-  return createCourseImportService(await getDeps()).createCourseFromPages(input);
+  return courseImportService.createCourseFromPages(input);
 }
 
 export async function addPages(courseId: string, pages: ImportPageInput[]) {
-  return createCourseImportService(await getDeps()).addPages(courseId, pages);
+  return courseImportService.addPages(courseId, pages);
 }
 
 export async function removePage(courseId: string, pageId: string) {
-  return createCourseImportService(await getDeps()).removePage(courseId, pageId);
+  return courseImportService.removePage(courseId, pageId);
 }
 
 export async function reorderPages(courseId: string, orderedPageIds: string[]) {
-  return createCourseImportService(await getDeps()).reorderPages(courseId, orderedPageIds);
+  return courseImportService.reorderPages(courseId, orderedPageIds);
 }
 
 export async function rotatePage(pageId: string, rotation: number) {
-  return createCourseImportService(await getDeps()).rotatePage(pageId, rotation);
+  return courseImportService.rotatePage(pageId, rotation);
 }
 
 export async function markPageQuality(pageId: string, qualityStatus: PageQualityStatus) {
-  return createCourseImportService(await getDeps()).markPageQuality(pageId, qualityStatus);
+  return courseImportService.markPageQuality(pageId, qualityStatus);
 }
 
 export async function compileCourse(courseId: string) {
-  return createCourseImportService(await getDeps()).compileCourse(courseId);
+  return courseImportService.compileCourse(courseId);
 }

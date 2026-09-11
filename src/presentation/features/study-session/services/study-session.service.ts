@@ -196,43 +196,41 @@ function createStudySessionService(deps: StudySessionServiceDeps) {
   };
 }
 
-async function getDeps(): Promise<StudySessionServiceDeps> {
-  return {
+const studySessionService = createStudySessionService({
     attempts: attemptsRepository,
     courses: coursesRepository,
     exercises: exercisesRepository,
     sessions: studySessionsRepository,
-  };
-}
+});
 
 export async function startSession(input: StartSessionInput) {
-  return createStudySessionService(await getDeps()).startSession(input);
+  return studySessionService.startSession(input);
 }
 
 export async function getSession(sessionId: string) {
-  return createStudySessionService(await getDeps()).getSession(sessionId);
+  return studySessionService.getSession(sessionId);
 }
 
 export async function getActiveSession(courseId: string) {
-  return createStudySessionService(await getDeps()).getActiveSession(courseId);
+  return studySessionService.getActiveSession(courseId);
 }
 
 export async function resumeSession(courseId: string) {
-  return createStudySessionService(await getDeps()).resumeSession(courseId);
+  return studySessionService.resumeSession(courseId);
 }
 
 export async function submitAnswer(input: SubmitAnswerInput) {
-  return createStudySessionService(await getDeps()).submitAnswer(input);
+  return studySessionService.submitAnswer(input);
 }
 
 export async function moveToNextExercise(sessionId: string) {
-  return createStudySessionService(await getDeps()).moveToNextExercise(sessionId);
+  return studySessionService.moveToNextExercise(sessionId);
 }
 
 export async function completeSession(sessionId: string) {
-  return createStudySessionService(await getDeps()).completeSession(sessionId);
+  return studySessionService.completeSession(sessionId);
 }
 
 export async function abandonSession(sessionId: string) {
-  return createStudySessionService(await getDeps()).abandonSession(sessionId);
+  return studySessionService.abandonSession(sessionId);
 }
