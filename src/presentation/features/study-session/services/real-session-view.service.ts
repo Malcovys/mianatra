@@ -1,4 +1,13 @@
-import type { Concept, ExerciseAttempt, SessionReport, StudySession } from "@/src/database";
+import {
+  attemptsRepository,
+  conceptsRepository,
+  exercisesRepository,
+  studySessionsRepository,
+  type Concept,
+  type ExerciseAttempt,
+  type SessionReport,
+  type StudySession,
+} from "@/src/database";
 import { buildSessionReport } from "@/src/presentation/features/reports";
 import { SessionNotFoundError } from "@/src/presentation/features/shared";
 import { toSessionExercise, type RealSessionExercise } from "../utils/real-session-exercise";
@@ -39,7 +48,6 @@ export type RealReportView =
     };
 
 export async function startRealCourseSession(courseId: string) {
-  const { exercisesRepository } = await import("@/src/database");
   const exercises = await exercisesRepository.findAllByCourse(courseId);
   if (exercises.length === 0) {
     return null;
@@ -53,12 +61,10 @@ export async function startRealCourseSession(courseId: string) {
 }
 
 export async function countRealCourseExercises(courseId: string) {
-  const { exercisesRepository } = await import("@/src/database");
   return (await exercisesRepository.findAllByCourse(courseId)).length;
 }
 
 export async function loadRealSessionView(sessionId: string): Promise<RealSessionView> {
-  const { attemptsRepository, conceptsRepository, exercisesRepository, studySessionsRepository } = await import("@/src/database");
   const session = await studySessionsRepository.findById(sessionId);
   if (!session) {
     return { status: "missing" };
@@ -121,7 +127,6 @@ export async function submitRealSessionAnswer(input: {
 }
 
 export async function loadRealCorrectionView(sessionId: string, attemptId: string): Promise<RealCorrectionView> {
-  const { attemptsRepository, conceptsRepository, exercisesRepository, studySessionsRepository } = await import("@/src/database");
   const session = await studySessionsRepository.findById(sessionId);
   if (!session) {
     return { status: "missing" };
@@ -147,7 +152,6 @@ export async function loadRealCorrectionView(sessionId: string, attemptId: strin
 }
 
 export async function completeRealSessionAndBuildReport(sessionId: string) {
-  const { studySessionsRepository } = await import("@/src/database");
   const session = await studySessionsRepository.findById(sessionId);
   if (!session) {
     throw new SessionNotFoundError();
@@ -163,7 +167,6 @@ async function conceptName(conceptId: string | null, concepts: Map<string, Conce
 }
 
 export async function loadRealReportView(sessionId: string): Promise<RealReportView> {
-  const { conceptsRepository, studySessionsRepository } = await import("@/src/database");
   const session = await studySessionsRepository.findById(sessionId);
   if (!session) {
     return { status: "missing" };

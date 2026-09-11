@@ -1,4 +1,10 @@
-import type { CourseStatus, CreateCourseInput, UpdateCourseInput } from "@/src/database";
+import {
+  coursesRepository,
+  subjectsRepository,
+  type CourseStatus,
+  type CreateCourseInput,
+  type UpdateCourseInput,
+} from "@/src/database";
 import { CourseNotFoundError, SubjectNotFoundError } from "@/src/presentation/features/shared";
 
 const courseStatuses: CourseStatus[] = ["draft", "processing", "ready", "archived"];
@@ -50,56 +56,47 @@ function normalizeCoursePatch(input: CoursePatch): UpdateCourseInput {
 }
 
 export async function listCourses() {
-  const { coursesRepository } = await import("@/src/database");
   return coursesRepository.findAll();
 }
 
 export async function listCoursesBySubject(subjectId: string) {
-  const { coursesRepository, subjectsRepository } = await import("@/src/database");
   if (!(await subjectsRepository.findById(subjectId))) throw new SubjectNotFoundError();
   return coursesRepository.findAllBySubject(subjectId);
 }
 
 export async function getCourse(courseId: string) {
-  const { coursesRepository } = await import("@/src/database");
   const course = await coursesRepository.findById(courseId);
   if (!course) throw new CourseNotFoundError();
   return course;
 }
 
 export async function getCourseDetail(courseId: string) {
-  const { coursesRepository } = await import("@/src/database");
   const detail = await coursesRepository.findDetailById(courseId);
   if (!detail) throw new CourseNotFoundError();
   return detail;
 }
 
 export async function createDraftCourse(input: CourseInput) {
-  const { coursesRepository, subjectsRepository } = await import("@/src/database");
   if (!(await subjectsRepository.findById(input.subjectId))) throw new SubjectNotFoundError();
   return coursesRepository.create(normalizeCourseInput(input, "draft"));
 }
 
 export async function updateCourse(courseId: string, input: CoursePatch) {
-  const { coursesRepository } = await import("@/src/database");
   if (!(await coursesRepository.findById(courseId))) throw new CourseNotFoundError();
   return coursesRepository.update(courseId, normalizeCoursePatch(input));
 }
 
 export async function renameCourse(courseId: string, title: string) {
-  const { coursesRepository } = await import("@/src/database");
   if (!(await coursesRepository.findById(courseId))) throw new CourseNotFoundError();
   return coursesRepository.update(courseId, { title: normalizeText(title) });
 }
 
 export async function archiveCourse(courseId: string) {
-  const { coursesRepository } = await import("@/src/database");
   if (!(await coursesRepository.findById(courseId))) throw new CourseNotFoundError();
   return coursesRepository.archive(courseId);
 }
 
 export async function deleteCourse(courseId: string) {
-  const { coursesRepository } = await import("@/src/database");
   if (!(await coursesRepository.findById(courseId))) throw new CourseNotFoundError();
   await coursesRepository.remove(courseId);
 }

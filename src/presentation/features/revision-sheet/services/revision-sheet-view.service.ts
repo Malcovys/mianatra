@@ -1,4 +1,4 @@
-import type { RevisionSheet } from "@/src/database";
+import { revisionSheetsRepository, type RevisionSheet } from "@/src/database";
 import { generatedRevisionSheetSchema, type GeneratedRevisionSheet } from "../schemas/generated-revision-sheet.schema";
 
 export type RevisionSheetViewState =
@@ -19,7 +19,6 @@ export function parseRevisionSheetContent(sheet: RevisionSheet): RevisionSheetVi
 }
 
 export async function loadLatestRevisionSheet(courseId: string): Promise<RevisionSheetViewState> {
-  const { revisionSheetsRepository } = await import("@/src/database");
   const sheet = await revisionSheetsRepository.findLatestByCourse(courseId);
   return sheet ? parseRevisionSheetContent(sheet) : { status: "missing" };
 }

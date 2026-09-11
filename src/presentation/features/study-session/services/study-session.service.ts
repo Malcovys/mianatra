@@ -1,4 +1,16 @@
-import type { Course, CreateAttemptInput, Exercise, ExerciseAttempt, StudySession, StudySessionType, SubmitAttemptWithProgressInput } from "@/src/database";
+import {
+  attemptsRepository,
+  coursesRepository,
+  exercisesRepository,
+  studySessionsRepository,
+  type Course,
+  type CreateAttemptInput,
+  type Exercise,
+  type ExerciseAttempt,
+  type StudySession,
+  type StudySessionType,
+  type SubmitAttemptWithProgressInput,
+} from "@/src/database";
 import { classifyMistake, validateExerciseAnswer } from "@/src/presentation/features/exercises";
 import { calculateConceptScore, determineConceptStatus } from "@/src/presentation/features/progress";
 import {
@@ -185,12 +197,11 @@ function createStudySessionService(deps: StudySessionServiceDeps) {
 }
 
 async function getDeps(): Promise<StudySessionServiceDeps> {
-  const repositories = await import("@/src/database");
   return {
-    attempts: repositories.attemptsRepository,
-    courses: repositories.coursesRepository,
-    exercises: repositories.exercisesRepository,
-    sessions: repositories.studySessionsRepository,
+    attempts: attemptsRepository,
+    courses: coursesRepository,
+    exercises: exercisesRepository,
+    sessions: studySessionsRepository,
   };
 }
 

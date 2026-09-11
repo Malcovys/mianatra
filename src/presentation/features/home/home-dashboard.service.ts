@@ -1,8 +1,8 @@
+import { coursesRepository, exercisesRepository, studySessionsRepository } from "@/src/database";
 import { loadSubjectOverviews } from "@/src/presentation/features/subjects";
 import type { HomeDashboard } from "./home-dashboard.types";
 
 export async function loadHomeDashboard(): Promise<HomeDashboard> {
-  const { coursesRepository, exercisesRepository, studySessionsRepository } = await import("@/src/database");
   const [subjects, activeSessions] = await Promise.all([
     loadSubjectOverviews(),
     studySessionsRepository.findActive(),

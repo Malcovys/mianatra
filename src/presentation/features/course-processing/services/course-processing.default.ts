@@ -1,3 +1,4 @@
+import * as repositories from "@/src/database";
 import { createConfiguredMobileAIService } from "@/src/presentation/features/ai-settings";
 import { analyzeCoursePage, analyzeCoursePages, persistCourseAnalysis, type AnalyzeCoursePagesInput } from "@/src/presentation/features/course-analysis";
 import { generateCourseExercises } from "@/src/presentation/features/exercises";
@@ -10,8 +11,6 @@ function logExerciseGeneration(event: string, payload: Record<string, unknown>) 
 }
 
 export async function createDefaultCourseProcessingDeps(): Promise<CourseProcessingDeps> {
-  const repositories = await import("@/src/database");
-
   return {
     courses: repositories.coursesRepository,
     pages: {

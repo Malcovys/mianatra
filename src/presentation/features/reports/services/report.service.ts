@@ -1,3 +1,4 @@
+import { attemptsRepository, exercisesRepository, reportsRepository, studySessionsRepository } from "@/src/database";
 import { SessionNotFoundError } from "@/src/presentation/features/shared";
 
 function buildSummary(correct: number, total: number) {
@@ -28,12 +29,10 @@ function buildRecommendation(correct: number, total: number) {
 }
 
 export async function getSessionReport(sessionId: string) {
-  const { reportsRepository } = await import("@/src/database");
   return reportsRepository.findBySession(sessionId);
 }
 
 export async function buildSessionReport(sessionId: string) {
-  const { attemptsRepository, exercisesRepository, reportsRepository, studySessionsRepository } = await import("@/src/database");
   if (!(await studySessionsRepository.findById(sessionId))) {
     throw new SessionNotFoundError();
   }

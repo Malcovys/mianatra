@@ -1,4 +1,9 @@
-import type { CreateSubjectInput, UpdateSubjectInput } from "@/src/database";
+import {
+  coursesRepository,
+  subjectsRepository,
+  type CreateSubjectInput,
+  type UpdateSubjectInput,
+} from "@/src/database";
 import { DuplicateSubjectNameError, SubjectInUseError, SubjectNotFoundError } from "@/src/presentation/features/shared";
 
 export type SubjectInput = {
@@ -40,19 +45,16 @@ function wrapDuplicateSubject(error: unknown): never {
 }
 
 export async function listSubjects() {
-  const { subjectsRepository } = await import("@/src/database");
   return subjectsRepository.findAll();
 }
 
 export async function getSubject(id: string) {
-  const { subjectsRepository } = await import("@/src/database");
   const subject = await subjectsRepository.findById(id);
   if (!subject) throw new SubjectNotFoundError();
   return subject;
 }
 
 export async function createSubject(input: SubjectInput) {
-  const { subjectsRepository } = await import("@/src/database");
   try {
     return await subjectsRepository.create(normalizeSubjectInput(input));
   } catch (error) {
@@ -61,7 +63,6 @@ export async function createSubject(input: SubjectInput) {
 }
 
 export async function updateSubject(id: string, input: SubjectPatch) {
-  const { subjectsRepository } = await import("@/src/database");
   if (!(await subjectsRepository.findById(id))) throw new SubjectNotFoundError();
   try {
     return await subjectsRepository.update(id, normalizeSubjectPatch(input));
@@ -71,7 +72,6 @@ export async function updateSubject(id: string, input: SubjectPatch) {
 }
 
 export async function deleteSubject(id: string) {
-  const { coursesRepository, subjectsRepository } = await import("@/src/database");
   if (!(await subjectsRepository.findById(id))) throw new SubjectNotFoundError();
   if ((await coursesRepository.findAllBySubject(id)).length > 0) throw new SubjectInUseError();
   await subjectsRepository.remove(id);

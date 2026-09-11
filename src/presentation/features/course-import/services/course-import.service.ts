@@ -1,4 +1,15 @@
-import type { Course, CoursePage, CourseStatus, CreateCourseWithPagesInput, CreatePageInput, PageQualityStatus, Subject } from "@/src/database";
+import {
+  coursesRepository,
+  pagesRepository,
+  subjectsRepository,
+  type Course,
+  type CoursePage,
+  type CourseStatus,
+  type CreateCourseWithPagesInput,
+  type CreatePageInput,
+  type PageQualityStatus,
+  type Subject,
+} from "@/src/database";
 import { CourseHasNoPagesError, CourseNotFoundError, SubjectNotFoundError } from "@/src/presentation/features/shared";
 
 export type ImportPageInput = {
@@ -141,13 +152,11 @@ function createCourseImportService(deps: CourseImportServiceDeps) {
 }
 
 async function getDeps(): Promise<CourseImportServiceDeps> {
-  const repositories = await import("@/src/database");
-  return { courses: repositories.coursesRepository, pages: repositories.pagesRepository, subjects: repositories.subjectsRepository };
+  return { courses: coursesRepository, pages: pagesRepository, subjects: subjectsRepository };
 }
 
 export async function getCourseImportDefaults() {
-  const repositories = await import("@/src/database");
-  const subjects = await repositories.subjectsRepository.findAll();
+  const subjects = await subjectsRepository.findAll();
   return {
     subject: subjects[0] ?? null,
     subjectName: subjects[0]?.name ?? "SVT",
@@ -162,21 +171,20 @@ export async function getOrCreateCourseImportSubject(name: string) {
     throw new SubjectNotFoundError();
   }
 
-  const repositories = await import("@/src/database");
-  const existingSubject = await repositories.subjectsRepository.findByName(normalizedName);
+  const existingSubject = await subjectsRepository.findByName(normalizedName);
   if (existingSubject) {
     return existingSubject;
   }
 
   try {
-    return await repositories.subjectsRepository.create({
+    return await subjectsRepository.create({
       name: normalizedName,
       icon: "book",
       color: "#D94B24",
       isDefault: false,
     });
   } catch {
-    const subject = await repositories.subjectsRepository.findByName(normalizedName);
+    const subject = await subjectsRepository.findByName(normalizedName);
     if (subject) {
       return subject;
     }

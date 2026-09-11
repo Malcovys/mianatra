@@ -1,3 +1,4 @@
+import { coursesRepository, recommendationsRepository, studySessionsRepository } from "@/src/database";
 import { buildRecommendations, rankRecommendations, type RecommendationContext, type RecommendationDraft } from "../domain";
 
 function sameRecommendation(left: Pick<RecommendationDraft, "courseId" | "conceptId" | "type">, right: Pick<RecommendationDraft, "courseId" | "conceptId" | "type">) {
@@ -5,7 +6,6 @@ function sameRecommendation(left: Pick<RecommendationDraft, "courseId" | "concep
 }
 
 async function buildRecommendationContext(): Promise<RecommendationContext> {
-    const { coursesRepository, studySessionsRepository } = await import("@/src/database");
     const courses = await coursesRepository.findAll();
     const activeSessions = await studySessionsRepository.findActive();
     const interruptedSessions = activeSessions
@@ -39,22 +39,18 @@ async function buildRecommendationContext(): Promise<RecommendationContext> {
 }
 
 export async function getActiveRecommendations() {
-  const { recommendationsRepository } = await import("@/src/database");
   return rankRecommendations(await recommendationsRepository.findActive());
 }
 
 export async function getPrimaryRecommendation() {
-  const { recommendationsRepository } = await import("@/src/database");
   return rankRecommendations(await recommendationsRepository.findActive())[0] ?? null;
 }
 
 export async function completeRecommendation(id: string) {
-  const { recommendationsRepository } = await import("@/src/database");
   return recommendationsRepository.complete(id);
 }
 
 export async function refreshRecommendations() {
-  const { recommendationsRepository } = await import("@/src/database");
   const activeRecommendations = await recommendationsRepository.findActive();
   const drafts = rankRecommendations(buildRecommendations(await buildRecommendationContext()));
   const createdRecommendations = [];

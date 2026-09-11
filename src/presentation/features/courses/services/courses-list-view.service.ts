@@ -1,4 +1,4 @@
-import type { CourseDetail } from "@/src/database";
+import { coursesRepository, type CourseDetail } from "@/src/database";
 import type { CourseListItem } from "../types/course-list.types";
 import { buildRealCourseResults } from "./course-route-state.service";
 
@@ -47,7 +47,6 @@ export function buildCourseGradeFilters(items: readonly Pick<CourseListItem, "gr
 }
 
 export async function loadCoursesList() {
-  const { coursesRepository } = await import("@/src/database");
   const courses = (await coursesRepository.findAll()).filter((course) => course.status !== "archived");
   const details = await Promise.all(courses.map((course) => coursesRepository.findDetailById(course.id)));
   return details

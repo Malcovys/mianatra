@@ -1,4 +1,4 @@
-import type { CourseDetail } from "@/src/database";
+import { coursesRepository, type CourseDetail } from "@/src/database";
 import { buildCourseProgressSummary } from "@/src/presentation/features/progress/domain";
 
 export type CourseResultCounters = {
@@ -41,7 +41,6 @@ export function buildRealCourseResults(detail: Pick<CourseDetail, "course" | "co
 }
 
 export async function loadRealCourseResults(courseId: string): Promise<RealCourseResultsState> {
-  const { coursesRepository } = await import("@/src/database");
   const detail = await coursesRepository.findDetailById(courseId);
   if (!detail) {
     return { status: "missing" };

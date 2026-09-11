@@ -12,11 +12,9 @@ import {
     DEFAULT_GEMMA_MODEL,
     GeminiMobileProvider,
     getAIErrorCode,
-    type AILogger,
-    type GeminiFetch,
-    type GeminiMobileTransport,
     type GemmaModel,
 } from "@/src/services/ai";
+  import { settingsRepository } from "@/src/database";
 
 export const AI_SETTING_KEYS = {
   geminiApiKey: "gemini_api_key",
@@ -37,20 +35,6 @@ export type GeminiConfigurationTestResult = {
   latencyMs: number;
   message: string;
   errorCode: string | null;
-};
-
-type SettingsRepository = {
-  get(key: string): Promise<string | null>;
-  set(key: string, value: string): Promise<unknown>;
-  remove(key: string): Promise<void>;
-};
-
-type AISettingsServiceDeps = {
-  settings: SettingsRepository;
-  transport?: GeminiMobileTransport;
-  fetchFn?: GeminiFetch;
-  logger?: AILogger;
-  timeoutMs?: number;
 };
 
 export class GeminiApiKeyMissingError extends Error {
@@ -146,88 +130,88 @@ function configurationErrorCode(error: unknown) {
   return error instanceof Error ? getAIErrorCode(error) : "AI_UNKNOWN_ERROR";
 }
 
-function createAISettingsService(deps: AISettingsServiceDeps) {
-  async function getGeminiApiKey() {
-    return normalizeApiKey(await deps.settings.get(AI_SETTING_KEYS.geminiApiKey));
-  }
+export async function getGeminiApiKey() {
+  return normalizeApiKey(await settingsRepository.get(AI_SETTING_KEYS.geminiApiKey));
+}
 
-  async function setGeminiApiKey(value: string) {
-    const normalized = normalizeApiKey(value);
-    if (!normalized) {
-      await deps.settings.remove(AI_SETTING_KEYS.geminiApiKey);
-      return null;
-    }
-    await deps.settings.set(AI_SETTING_KEYS.geminiApiKey, normalized);
-    return normalized;
+export async function setGeminiApiKey(value: string) {
+  const normalized = normalizeApiKey(value);
+  if (!normalized) {
+    await settingsRepository.remove(AI_SETTING_KEYS.geminiApiKey);
+    return null;
   }
+  await settingsRepository.set(AI_SETTING_KEYS.geminiApiKey, normalized);
+  return normalized;
+}
 
-  async function removeGeminiApiKey() {
-    await deps.settings.remove(AI_SETTING_KEYS.geminiApiKey);
+export async function removeGeminiApiKey() {
+  await settingsRepository.remove(AI_SETTING_KEYS.geminiApiKey);
+}
+
+export async function getGemmaModel(): Promise<GemmaModel> {
+  const value = await settingsRepository.get(AI_SETTING_KEYS.gemmaModel);
+  if (value === null || value.trim() === "") {
+    return DEFAULT_GEMMA_MODEL;
   }
-
-  async function getGemmaModel(): Promise<GemmaModel> {
-    const value = await deps.settings.get(AI_SETTING_KEYS.gemmaModel);
-    if (value === null || value.trim() === "") {
-      return DEFAULT_GEMMA_MODEL;
-    }
-    if (!isGemmaModel(value)) {
-      throw new GemmaModelUnsupportedError();
-    }
-    return value;
+  if (!isGemmaModel(value)) {
+    throw new GemmaModelUnsupportedError();
   }
+  return value;
+}
 
-  async function setGemmaModel(value: string) {
-    if (!isGemmaModel(value)) {
-      throw new GemmaModelUnsupportedError();
-    }
-    await deps.settings.set(AI_SETTING_KEYS.gemmaModel, value);
-    return value;
+export async function setGemmaModel(value: string) {
+  if (!isGemmaModel(value)) {
+    throw new GemmaModelUnsupportedError();
   }
+  await settingsRepository.set(AI_SETTING_KEYS.gemmaModel, value);
+  return value;
+}
 
-  async function isAIEnabled() {
-    return parseBoolean(await deps.settings.get(AI_SETTING_KEYS.aiEnabled));
+export async function isAIEnabled() {
+  return parseBoolean(await settingsRepository.get(AI_SETTING_KEYS.aiEnabled));
+}
+
+export async function setAIEnabled(value: boolean) {
+  await settingsRepository.set(AI_SETTING_KEYS.aiEnabled, serializeBoolean(value));
+  return value;
+}
+
+export async function getAIConfiguration(): Promise<AIConfiguration> {
+  const [apiKey, gemmaModel, aiEnabled] = await Promise.all([getGeminiApiKey(), getGemmaModel(), isAIEnabled()]);
+  return {
+    aiEnabled,
+    geminiApiKeyConfigured: apiKey !== null,
+    geminiApiKeyPreview: previewKey(apiKey),
+    gemmaModel,
+  };
+}
+
+function createGeminiService(apiKey: string, model: GemmaModel) {
+  return new AIService(
+    new GeminiMobileProvider({
+      apiKey,
+      model,
+      timeoutMs: DEFAULT_GEMINI_TIMEOUT_MS,
+    }),
+  );
+}
+
+export async function createConfiguredMobileAIService() {
+  const [enabled, apiKey, model] = await Promise.all([isAIEnabled(), getGeminiApiKey(), getGemmaModel()]);
+  if (!enabled) {
+    return null;
   }
-
-  async function setAIEnabled(value: boolean) {
-    await deps.settings.set(AI_SETTING_KEYS.aiEnabled, serializeBoolean(value));
-    return value;
+  if (!apiKey) {
+    throw new GeminiApiKeyMissingError();
   }
-
-  async function getAIConfiguration(): Promise<AIConfiguration> {
-    const [apiKey, gemmaModel, aiEnabled] = await Promise.all([getGeminiApiKey(), getGemmaModel(), isAIEnabled()]);
-    return {
-      aiEnabled,
-      geminiApiKeyConfigured: apiKey !== null,
-      geminiApiKeyPreview: previewKey(apiKey),
-      gemmaModel,
-    };
+  try {
+    return createGeminiService(apiKey, model);
+  } catch (error) {
+    throw mapConfigurationError(error);
   }
+}
 
-  async function createConfiguredMobileAIService() {
-    const [enabled, apiKey, model] = await Promise.all([isAIEnabled(), getGeminiApiKey(), getGemmaModel()]);
-    if (!enabled) {
-      return null;
-    }
-    if (!apiKey) {
-      throw new GeminiApiKeyMissingError();
-    }
-    try {
-      return new AIService(
-        new GeminiMobileProvider({
-          apiKey,
-          model,
-          transport: deps.transport,
-          fetchFn: deps.fetchFn,
-          logger: deps.logger,
-          timeoutMs: deps.timeoutMs ?? DEFAULT_GEMINI_TIMEOUT_MS,
-        }),
-      );
-    } catch (error) {
-      throw mapConfigurationError(error);
-    }
-  }
-
-  async function testGeminiConfiguration(): Promise<GeminiConfigurationTestResult> {
+export async function testGeminiConfiguration(): Promise<GeminiConfigurationTestResult> {
     const startedAt = Date.now();
     const model = await getGemmaModel();
     try {
@@ -235,16 +219,7 @@ function createAISettingsService(deps: AISettingsServiceDeps) {
       if (!apiKey) {
         throw new GeminiApiKeyMissingError();
       }
-      const service = new AIService(
-        new GeminiMobileProvider({
-          apiKey,
-          model,
-          transport: deps.transport,
-          fetchFn: deps.fetchFn,
-          logger: deps.logger,
-          timeoutMs: deps.timeoutMs ?? DEFAULT_GEMINI_TIMEOUT_MS,
-        }),
-      );
+      const service = createGeminiService(apiKey, model);
       const response = await service.generateText({
         prompt: "Réponds uniquement par le mot OK.",
         options: { maxOutputTokens: 8, temperature: 0 },
@@ -269,66 +244,4 @@ function createAISettingsService(deps: AISettingsServiceDeps) {
         errorCode: configurationErrorCode(mapped),
       };
     }
-  }
-
-  return {
-    createConfiguredMobileAIService,
-    getAIConfiguration,
-    getGeminiApiKey,
-    setGeminiApiKey,
-    removeGeminiApiKey,
-    getGemmaModel,
-    setGemmaModel,
-    isAIEnabled,
-    setAIEnabled,
-    testGeminiConfiguration,
-  };
-}
-
-async function getRepository() {
-  return (await import("@/src/database")).settingsRepository;
-}
-
-async function createDefaultService() {
-  return createAISettingsService({ settings: await getRepository() });
-}
-
-export async function getGeminiApiKey() {
-  return (await createDefaultService()).getGeminiApiKey();
-}
-
-export async function setGeminiApiKey(value: string) {
-  return (await createDefaultService()).setGeminiApiKey(value);
-}
-
-export async function removeGeminiApiKey() {
-  return (await createDefaultService()).removeGeminiApiKey();
-}
-
-export async function getGemmaModel() {
-  return (await createDefaultService()).getGemmaModel();
-}
-
-export async function setGemmaModel(value: string) {
-  return (await createDefaultService()).setGemmaModel(value);
-}
-
-export async function isAIEnabled() {
-  return (await createDefaultService()).isAIEnabled();
-}
-
-export async function setAIEnabled(value: boolean) {
-  return (await createDefaultService()).setAIEnabled(value);
-}
-
-export async function getAIConfiguration() {
-  return (await createDefaultService()).getAIConfiguration();
-}
-
-export async function createConfiguredMobileAIService() {
-  return (await createDefaultService()).createConfiguredMobileAIService();
-}
-
-export async function testGeminiConfiguration() {
-  return (await createDefaultService()).testGeminiConfiguration();
 }
