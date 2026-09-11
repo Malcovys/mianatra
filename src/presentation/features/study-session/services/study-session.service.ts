@@ -2,12 +2,12 @@ import type { Course, CreateAttemptInput, Exercise, ExerciseAttempt, StudySessio
 import { classifyMistake, validateExerciseAnswer } from "@/src/presentation/features/exercises";
 import { calculateConceptScore, determineConceptStatus } from "@/src/presentation/features/progress";
 import {
-  CourseNotFoundError,
-  ExerciseNotFoundError,
-  InvalidAnswerError,
-  InvalidSessionStateError,
-  SessionAlreadyCompletedError,
-  SessionNotFoundError,
+    CourseNotFoundError,
+    ExerciseNotFoundError,
+    InvalidAnswerError,
+    InvalidSessionStateError,
+    SessionAlreadyCompletedError,
+    SessionNotFoundError,
 } from "@/src/presentation/features/shared";
 
 export type StartSessionInput = {
@@ -225,14 +225,3 @@ export async function completeSession(sessionId: string) {
 export async function abandonSession(sessionId: string) {
   return createStudySessionService(await getDeps()).abandonSession(sessionId);
 }
-
-const studySessionService = {
-  abandonSession,
-  completeSession,
-  getActiveSession,
-  getSession,
-  moveToNextExercise,
-  resumeSession,
-  startSession,
-  submitAnswer,
-};

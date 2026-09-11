@@ -1,11 +1,11 @@
 import { colors, fonts } from "@/src/theme";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import { Tabs } from "expo-router";
-import { View } from "react-native";
+import { View, type ColorValue } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 type TabIconProps = {
-  color: string;
+  color: ColorValue;
   name: React.ComponentProps<typeof FontAwesome5>["name"];
 };
 

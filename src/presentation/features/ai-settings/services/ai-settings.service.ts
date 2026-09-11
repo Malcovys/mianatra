@@ -1,21 +1,21 @@
 import {
-  AIAuthenticationError,
-  AIError,
-  AIInvalidResponseError,
-  AIModelNotFoundError,
-  AIProviderUnavailableError,
-  AIRateLimitError,
-  AIService,
-  AITimeoutError,
-  ALLOWED_GEMMA_MODELS,
-  DEFAULT_GEMINI_TIMEOUT_MS,
-  DEFAULT_GEMMA_MODEL,
-  GeminiMobileProvider,
-  getAIErrorCode,
-  type AILogger,
-  type GeminiFetch,
-  type GeminiMobileTransport,
-  type GemmaModel,
+    AIAuthenticationError,
+    AIError,
+    AIInvalidResponseError,
+    AIModelNotFoundError,
+    AIProviderUnavailableError,
+    AIRateLimitError,
+    AIService,
+    AITimeoutError,
+    ALLOWED_GEMMA_MODELS,
+    DEFAULT_GEMINI_TIMEOUT_MS,
+    DEFAULT_GEMMA_MODEL,
+    GeminiMobileProvider,
+    getAIErrorCode,
+    type AILogger,
+    type GeminiFetch,
+    type GeminiMobileTransport,
+    type GemmaModel,
 } from "@/src/services/ai";
 
 export const AI_SETTING_KEYS = {
@@ -332,16 +332,3 @@ export async function createConfiguredMobileAIService() {
 export async function testGeminiConfiguration() {
   return (await createDefaultService()).testGeminiConfiguration();
 }
-
-const aiSettingsService = {
-  createConfiguredMobileAIService,
-  getAIConfiguration,
-  getGeminiApiKey,
-  setGeminiApiKey,
-  removeGeminiApiKey,
-  getGemmaModel,
-  setGemmaModel,
-  isAIEnabled,
-  setAIEnabled,
-  testGeminiConfiguration,
-};

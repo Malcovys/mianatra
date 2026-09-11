@@ -137,9 +137,3 @@ export async function analyzeCoursePage(
     throw mapAnalysisError(error);
   }
 }
-
-function createAnalyzeCoursePageService(dependencies: AnalyzeCoursePageDependencies) {
-  return {
-    analyzeCoursePage: (input: CoursePageAnalysisInput) => analyzeCoursePage(input, dependencies),
-  };
-}

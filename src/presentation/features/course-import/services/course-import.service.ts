@@ -211,5 +211,3 @@ export async function markPageQuality(pageId: string, qualityStatus: PageQuality
 export async function compileCourse(courseId: string) {
   return createCourseImportService(await getDeps()).compileCourse(courseId);
 }
-
-const courseImportService = { addPages, compileCourse, createCourseFromPages, markPageQuality, removePage, reorderPages, rotatePage };

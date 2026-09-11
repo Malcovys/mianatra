@@ -2,18 +2,18 @@ import { AIError } from "@/src/services/ai";
 import { z } from "zod";
 import { mergeCoursePageAnalyses } from "../domain/merge-course-page-analyses";
 import {
-  CoursePageAnalysisError,
-  CoursePageAnalysisImageError,
-  CoursePageAnalysisInputError,
-  CoursePageAnalysisJsonError,
-  CoursePageAnalysisJsonTruncatedError,
-  CoursePageAnalysisKeyInvalidError,
-  CoursePageAnalysisKeyMissingError,
-  CoursePageAnalysisModelError,
-  CoursePageAnalysisProviderError,
-  CoursePageAnalysisQuotaError,
-  CoursePageAnalysisSchemaError,
-  CoursePageAnalysisTimeoutError,
+    CoursePageAnalysisError,
+    CoursePageAnalysisImageError,
+    CoursePageAnalysisInputError,
+    CoursePageAnalysisJsonError,
+    CoursePageAnalysisJsonTruncatedError,
+    CoursePageAnalysisKeyInvalidError,
+    CoursePageAnalysisKeyMissingError,
+    CoursePageAnalysisModelError,
+    CoursePageAnalysisProviderError,
+    CoursePageAnalysisQuotaError,
+    CoursePageAnalysisSchemaError,
+    CoursePageAnalysisTimeoutError,
 } from "../errors/course-page-analysis.errors";
 import type { CoursePageAnalysisInput } from "../schemas/course-page-analysis.schema";
 import { analyzeCoursePagesInputSchema, multiPageCourseAnalysisSchema, type AnalyzeCoursePagesInput, type MultiPageCourseAnalysis } from "../schemas/multi-page-course-analysis.schema";
@@ -254,10 +254,4 @@ export async function analyzeCoursePages(
     }
     throw error;
   }
-}
-
-function createAnalyzeCoursePagesService(dependencies: AnalyzeCoursePagesDependencies) {
-  return {
-    analyzeCoursePages: (input: AnalyzeCoursePagesInput) => analyzeCoursePages(input, dependencies),
-  };
 }

@@ -1,11 +1,11 @@
 import type { Concept, Course, CourseAnalysis, Subject } from "@/src/database";
 import {
-  PersistCourseAnalysisConceptsReferencedError,
-  PersistCourseAnalysisCourseNotFoundError,
-  PersistCourseAnalysisFailedError,
-  PersistCourseAnalysisInvalidError,
-  PersistCourseAnalysisNoConceptsError,
-  PersistCourseAnalysisSubjectNotFoundError,
+    PersistCourseAnalysisConceptsReferencedError,
+    PersistCourseAnalysisCourseNotFoundError,
+    PersistCourseAnalysisFailedError,
+    PersistCourseAnalysisInvalidError,
+    PersistCourseAnalysisNoConceptsError,
+    PersistCourseAnalysisSubjectNotFoundError,
 } from "../errors/persist-course-analysis.errors";
 import { multiPageCourseAnalysisSchema, type MultiPageCourseAnalysis } from "../schemas/multi-page-course-analysis.schema";
 
@@ -170,10 +170,4 @@ export async function persistCourseAnalysis(
     }
     throw mapPersistenceError(error);
   }
-}
-
-function createPersistCourseAnalysisService(dependencies: PersistCourseAnalysisDeps) {
-  return {
-    persistCourseAnalysis: (input: PersistCourseAnalysisInput) => persistCourseAnalysis(input, dependencies),
-  };
 }
