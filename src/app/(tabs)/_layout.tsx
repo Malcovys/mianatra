@@ -18,6 +18,10 @@ function TabIcon({ color, name }: TabIconProps) {
 }
 
 export default function TabLayout() {
+  /** S'assurequ'il y a au moins 28 px d'espace en bas de l'écran, 
+   * tout en respectant la zone de sécurité du téléphone
+   * (encoche, barre de navigation, indicateur Home sur iPhone, etc.).
+  */ 
   const insets = useSafeAreaInsets();
   const bottomInset = Math.max(insets.bottom, 28);
 
