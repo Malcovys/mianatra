@@ -12,7 +12,7 @@ import { router } from "expo-router";
 import { useMemo, useState } from "react";
 import { View } from "react-native";
 
-export default function CoursesScreen() {
+export default function ParametersScreen() {
   const { errorMessage, grades, subjects, reload, status } = useSubjectsOverview();
 
   const [selectedFilter, setSelectedFilter] = useState("Tous");

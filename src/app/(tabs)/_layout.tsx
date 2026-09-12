@@ -65,11 +65,11 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="courses"
+        name="parameters"
         options={{
-          title: "Mes cours",
+          title: "Réglages",
           tabBarIcon: ({ color }) => (
-            <TabIcon name="book-open" color={color} />
+            <TabIcon name="cog" color={color} />
           ),
         }}
       />
