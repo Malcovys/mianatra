@@ -1,15 +1,13 @@
 import "@/global.css";
-import { MigrationGate } from "@/src/presentation/components/system/MigrationGate";
+import { MigrationGate } from "@/src/presentation/app/MigrationGate";
 import { GluestackUIProvider } from '@/src/presentation/components/ui/gluestack-ui-provider';
+import { Fraunces_700Bold } from "@expo-google-fonts/fraunces";
 import {
-    Fraunces_700Bold,
-} from "@expo-google-fonts/fraunces";
-import {
-    PlusJakartaSans_400Regular,
-    PlusJakartaSans_500Medium,
-    PlusJakartaSans_600SemiBold,
-    PlusJakartaSans_700Bold,
-    PlusJakartaSans_800ExtraBold,
+  PlusJakartaSans_400Regular,
+  PlusJakartaSans_500Medium,
+  PlusJakartaSans_600SemiBold,
+  PlusJakartaSans_700Bold,
+  PlusJakartaSans_800ExtraBold,
 } from "@expo-google-fonts/plus-jakarta-sans";
 import { useFonts } from "expo-font";
 import { Stack } from "expo-router";
