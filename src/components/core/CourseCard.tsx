@@ -1,4 +1,4 @@
-import { AppCard, AppText, ProgressBar } from "@/src/components/shared";
+import { AppCard, AppText } from "@/src/components/shared";
 import { colors } from "@/src/theme";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import { Pressable, View } from "react-native";
@@ -7,12 +7,12 @@ export type CourseCardData = {
   id: string;
   title: string;
   subject: string;
-  grade?: string;
+  // grade?: string;
   pageCount: number;
-  progress: number;
-  iconName?: React.ComponentProps<typeof FontAwesome5>["name"] | string | null;
-  color?: string | null;
-  focusText?: string | null;
+  // progress: number;
+  // iconName?: React.ComponentProps<typeof FontAwesome5>["name"] | string | null;
+  // color?: string | null;
+  // focusText?: string | null;
 };
 
 type CourseCardProps = {
@@ -21,8 +21,8 @@ type CourseCardProps = {
 };
 
 export function CourseCard({ course, onPress }: CourseCardProps) {
-  const pageLabel = `${course.pageCount} page${course.pageCount > 1 ? "s" : ""}`;
-  const secondaryLine = [course.subject, course.grade, pageLabel].filter(Boolean).join(" • ");
+  // const pageLabel = `${course.pageCount} page${course.pageCount > 1 ? "s" : ""}`;
+  // const secondaryLine = [course.subject, course.grade, pageLabel].filter(Boolean).join(" • ");
 
   return (
     <Pressable
@@ -35,10 +35,10 @@ export function CourseCard({ course, onPress }: CourseCardProps) {
         <View
           accessibilityLabel={`Icône ${course.subject}`}
           className="h-16 w-16 items-center justify-center rounded-2xl"
-          style={{ backgroundColor: course.color ?? colors.secondary }}
+          style={{ backgroundColor: colors.secondary }}
         >
           <FontAwesome5
-            name={course.iconName ?? "book-open"}
+            name={"book-open"}
             size={26}
             color={colors.white}
           />
@@ -47,15 +47,15 @@ export function CourseCard({ course, onPress }: CourseCardProps) {
           <View className="flex-row items-center gap-3">
             <View className="flex-1">
               <AppText variant="subtitle">{course.title}</AppText>
-              <AppText tone="secondary">{secondaryLine}</AppText>
+              {/* <AppText tone="secondary">{secondaryLine}</AppText> */}
             </View>
-            <AppText variant="label">{course.progress}%</AppText>
+            {/* <AppText variant="label">{course.progress}%</AppText> */}
           </View>
-          <ProgressBar
+          {/* <ProgressBar
             value={course.progress}
             accessibilityLabel={`Progression ${course.title}`}
-          />
-          <AppText tone="secondary">{course.focusText ?? "Pas encore révisé"}</AppText>
+          /> */}
+          {/* <AppText tone="secondary">{course.focusText ?? "Pas encore révisé"}</AppText> */}
         </View>
       </AppCard>
     </Pressable>

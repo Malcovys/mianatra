@@ -1,52 +1,24 @@
 import { SubjectCard } from "@/src/components/core";
 import {
   AppButton,
-  AppCard,
   AppScreen,
-  AppText,
-  EmptyStateCard,
 } from "@/src/components/shared";
 import { colors } from "@/src/theme";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import { router } from "expo-router";
+import { useState } from "react";
 import { Pressable, View } from "react-native";
 
-
-/** Local helpers */
-function openSubject(subjectId: string) {
-  router.push({
-    pathname: "/subject/[subjectId]",
-    params: { subjectId },
-  });
+type Subject = {
+  id: string;
+  name: string;
+  chapterCount: number;
 }
 
 
 /** Screen */
 export default function HomeScreen() {
-  const { dashboard, errorMessage, reload, status } = useHomeDashboard();
-
-  if (status === "loading") {
-    return (
-      <AppScreen contentClassName="gap-5 pb-10">
-        <AppCard className="gap-3">
-          <AppText variant="subtitle">Chargement de ton accueil…</AppText>
-          <AppText tone="secondary">On récupère tes cours enregistrés.</AppText>
-        </AppCard>
-      </AppScreen>
-    );
-  }
-
-  if (status === "error" || !dashboard) {
-    return (
-      <AppScreen contentClassName="gap-5 pb-10">
-        <AppCard className="gap-3">
-          <AppText variant="subtitle">{"Impossible de charger l'accueil"}</AppText>
-          <AppText tone="secondary">{errorMessage ?? "Une erreur est survenue."}</AppText>
-          <AppButton title="Réessayer" iconName="redo" onPress={reload} />
-        </AppCard>
-      </AppScreen>
-    );
-  }
+  const [subjects, setSubjects] = useState<Subject[]>([]);
 
   return (
     <AppScreen contentClassName="gap-4 pb-10 pt-3">
@@ -61,28 +33,17 @@ export default function HomeScreen() {
       </View>
 
       <View className="gap-3">
-        {dashboard.recentSubjects.length > 0 ? (
-          dashboard.recentSubjects.map((subject) => (
-            <SubjectCard
-              key={subject.id}
+        {subjects.map((subject) => (
+            <SubjectCard key={subject.id}
               subject={{
                 id: subject.id,
                 name: subject.name,
-                chapterCount: subject.chapterCount,
-                progress: subject.progress,
-                iconName: subject.iconName,
-                color: subject.color,
-                mainWeakness: subject.mainWeakness,
+                chapterCount: subject.chapterCount
               }}
-              onPress={() => openSubject(subject.id)}
+              onPress={() => router.push({ pathname: "/subject/[subjectId]", params: { subject.id } }) }
             />
           ))
-        ) : (
-          <EmptyStateCard
-            title="Aucun cours pour le moment"
-            description="Ajoute un cours depuis ta galerie pour le retrouver ici."
-          />
-        )}
+        }
       </View>
 
       <AppButton

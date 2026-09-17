@@ -1,143 +1,62 @@
 import { CourseCard } from "@/src/components/core";
-import { AppButton, AppCard, AppScreen, AppText, ProgressBar, ScreenHeader } from "@/src/components/shared";
-import { loadSubjectDetail, type SubjectDetailView } from "@/src/presentation/features/subjects";
-import { router, useFocusEffect, useLocalSearchParams } from "expo-router";
-import { useCallback, useRef, useState } from "react";
+import { AppButton, AppScreen, AppText, ScreenHeader } from "@/src/components/shared";
+import { router } from "expo-router";
+import { useState } from "react";
 import { View } from "react-native";
 
-type SubjectDetailStatus = "loading" | "ready" | "missing" | "error";
+// function lastReviewedLabel(value: string | null) {
+//   return value ? "récente" : "jamais";
+// }
 
-function lastReviewedLabel(value: string | null) {
-  return value ? "récente" : "jamais";
+type SubjectDetail = {
+  id: string;
+  name: string;
+  chapterCount: number;
+  masteredSujectCount: number;
+  cours: {
+    id: string;
+    title: string;
+    pageCount: number;
+  }[]
 }
 
 export default function SubjectDetailScreen() {
-  const { subjectId } = useLocalSearchParams<{ subjectId?: string }>();
-  const resolvedSubjectId = Array.isArray(subjectId) ? subjectId[0] : subjectId;
-  const loadIdRef = useRef(0);
-  const [detail, setDetail] = useState<SubjectDetailView | null>(null);
-  const [status, setStatus] = useState<SubjectDetailStatus>("loading");
+  // retrive subject id by url
+  // const { subjectId } = useLocalSearchParams<{ subjectId?: string }>();
+  // const resolvedSubjectId = Array.isArray(subjectId) ? subjectId[0] : subjectId;
 
-  const reload = useCallback(() => {
-    const loadId = loadIdRef.current + 1;
-    loadIdRef.current = loadId;
-    setStatus("loading");
+  const [subject, setSubject] = useState<SubjectDetail | null>(null);
 
-    if (!resolvedSubjectId) {
-      setDetail(null);
-      setStatus("missing");
-      return;
-    }
-
-    void loadSubjectDetail(resolvedSubjectId)
-      .then((nextDetail) => {
-        if (loadIdRef.current !== loadId) {
-          return;
-        }
-        setDetail(nextDetail);
-        setStatus(nextDetail ? "ready" : "missing");
-      })
-      .catch(() => {
-        if (loadIdRef.current !== loadId) {
-          return;
-        }
-        setDetail(null);
-        setStatus("error");
-      });
-  }, [resolvedSubjectId]);
-
-  useFocusEffect(
-    useCallback(() => {
-      reload();
-      return () => {
-        loadIdRef.current += 1;
-      };
-    }, [reload]),
-  );
-
-  if (status === "loading") {
-    return (
-      <AppScreen contentClassName="gap-5 pb-10">
-        <ScreenHeader title="Matière" subtitle="Chargement des chapitres." />
-        <AppCard className="gap-3">
-          <AppText variant="subtitle">Chargement de la matière…</AppText>
-          <AppText tone="secondary">Lecture des chapitres enregistrés sur ce téléphone.</AppText>
-        </AppCard>
-      </AppScreen>
-    );
-  }
-
-  if (status === "missing") {
-    return (
-      <AppScreen contentClassName="gap-5 pb-10">
-        <ScreenHeader title="Matière introuvable" subtitle="Cette matière n’est pas disponible." />
-        <AppCard className="gap-3">
-          <AppText variant="subtitle">Matière introuvable</AppText>
-          <AppText tone="secondary">Elle a peut-être été supprimée ou n’existe pas sur ce téléphone.</AppText>
-          <AppButton title="Retour à Mes cours" iconName="arrow-left" onPress={() => router.replace("/courses")} />
-        </AppCard>
-      </AppScreen>
-    );
-  }
-
-  if (status === "error" || !detail) {
-    return (
-      <AppScreen contentClassName="gap-5 pb-10">
-        <ScreenHeader title="Matière" subtitle="Erreur de lecture." />
-        <AppCard className="gap-3">
-          <AppText variant="subtitle">Impossible de charger la matière</AppText>
-          <AppText tone="secondary">Une erreur est survenue pendant la lecture des données SQLite.</AppText>
-          <AppButton title="Réessayer" iconName="redo" variant="secondary" onPress={reload} />
-        </AppCard>
-      </AppScreen>
-    );
-  }
+  if(subject == null) return null;
 
   return (
     <AppScreen contentClassName="gap-5 pb-10">
-      <ScreenHeader title={detail.subject.name} subtitle={`${detail.subject.chapterCount} chapitre${detail.subject.chapterCount > 1 ? "s" : ""}`} />
+      <ScreenHeader title={subject.name} subtitle={`${subject.chapterCount} chapitre${subject.chapterCount > 1 ? "s" : ""}`} />
 
-      <AppCard className="gap-3">
+      {/* <AppCard className="gap-3">
         <View className="flex-row items-center justify-between gap-3">
           <AppText variant="subtitle">Progression de la matière</AppText>
-          <AppText variant="label">{detail.subject.progress}%</AppText>
+          <AppText variant="label">{subject.progress}%</AppText>
         </View>
-        <ProgressBar value={detail.subject.progress} accessibilityLabel={`Progression ${detail.subject.name}`} />
+        <ProgressBar value={subject.progress} accessibilityLabel={`Progression ${subject.name}`} />
         <AppText tone="secondary">
-          {detail.subject.mainWeakness ? `À renforcer : ${detail.subject.mainWeakness}` : "Pas encore révisé"}
+          {subject.mainWeakness ? `À renforcer : ${subject.mainWeakness}` : "Pas encore révisé"}
         </AppText>
-      </AppCard>
+      </AppCard> */}
 
       <View className="gap-3">
         <AppText variant="heading">Chapitres</AppText>
-        {detail.chapters.length === 0 ? (
-          <AppCard className="gap-3">
-            <AppText variant="subtitle">Aucun chapitre</AppText>
-            <AppText tone="secondary">Ajoute un cours dans cette matière pour le retrouver ici.</AppText>
-          </AppCard>
-        ) : (
-          detail.chapters.map((chapter) => (
-            <CourseCard
-              key={chapter.id}
+        {subject.cours.map((chapter) => (
+            <CourseCard key={chapter.id}
               course={{
                 id: chapter.id,
                 title: chapter.title,
-                subject: detail.subject.name,
-                grade: chapter.grade,
+                subject: subject.name,
                 pageCount: chapter.pageCount,
-                progress: chapter.progress,
-                iconName: chapter.iconName,
-                color: chapter.subjectColor,
-                focusText: `Dernière révision : ${lastReviewedLabel(chapter.lastReviewedAt)}`,
               }}
-              onPress={() =>
-                router.push({
-                  pathname: "/course/[courseId]",
-                  params: { courseId: chapter.id },
-                })
-              }
+              onPress={() => router.push({ pathname: "/course/[courseId]", params: { courseId: chapter.id } }) }
             />
-          ))
+          )
         )}
       </View>
 
@@ -147,7 +66,7 @@ export default function SubjectDetailScreen() {
         onPress={() =>
           router.push({
             pathname: "/course/add",
-            params: { subjectId: detail.subject.id },
+            params: { subjectId: subject.id },
           })
         }
       />

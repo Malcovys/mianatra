@@ -1,4 +1,4 @@
-import { AppCard, AppText, ProgressBar } from "@/src/components/shared";
+import { AppCard, AppText } from "@/src/components/shared";
 import { colors, fonts } from "@/src/theme";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import { Pressable, View } from "react-native";
@@ -6,11 +6,11 @@ import { Pressable, View } from "react-native";
 export type SubjectCardData = {
   id: string;
   name: string;
-  color?: string | null;
-  iconName?: React.ComponentProps<typeof FontAwesome5>["name"] | string | null;
+  // color?: string | null;
+  // iconName?: React.ComponentProps<typeof FontAwesome5>["name"] | string | null;
   chapterCount: number;
-  progress: number;
-  mainWeakness?: string | null;
+  // progress: number;
+  // mainWeakness?: string | null;
 };
 
 type SubjectCardProps = {
@@ -42,8 +42,8 @@ export function SubjectCard({ subject, onPress }: SubjectCardProps) {
           accessibilityLabel={`Icône ${subject.name}`}
           className="h-[48px] w-[48px] items-center justify-center rounded-xl"
           style={{
-            backgroundColor: subject.color ?? colors.secondary,
-            shadowColor: subject.color ?? colors.secondary,
+            backgroundColor: colors.secondary,
+            shadowColor: colors.secondary,
             shadowOffset: { width: 0, height: 4 },
             shadowOpacity: 0.18,
             shadowRadius: 8,
@@ -51,7 +51,7 @@ export function SubjectCard({ subject, onPress }: SubjectCardProps) {
           }}
         >
           <FontAwesome5
-            name={subject.iconName ?? "book-open"}
+            name={"book-open"}
             size={20}
             color={colors.white}
           />
@@ -71,18 +71,18 @@ export function SubjectCard({ subject, onPress }: SubjectCardProps) {
                 {chapterLabel}
               </AppText>
             </View>
-            <AppText variant="label" className="text-[13px] leading-5">
+            {/* <AppText variant="label" className="text-[13px] leading-5">
               {subject.progress}%
-            </AppText>
+            </AppText> */}
           </View>
-          <ProgressBar
+          {/* <ProgressBar
             value={subject.progress}
             accessibilityLabel={`Progression ${subject.name}`}
             className="h-[7px]"
-          />
-          <AppText tone="secondary" numberOfLines={1} className="text-[12px] leading-[15px]">
+          /> */}
+          {/* <AppText tone="secondary" numberOfLines={1} className="text-[12px] leading-[15px]">
             {subject.mainWeakness ? `À renforcer : ${subject.mainWeakness}` : "Pas encore révisé"}
-          </AppText>
+          </AppText> */}
         </View>
       </AppCard>
     </Pressable>
