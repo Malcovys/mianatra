@@ -4,7 +4,7 @@ import {
     AppScreen,
     AppText,
     ProgressBar,
-} from "@/src/presentation/components/shared";
+} from "@/src/components/shared";
 import { useCourseProcessing } from "@/src/presentation/features/course-processing";
 import { buildRealCourseResults, emptyCourseResultCounters } from "@/src/presentation/features/courses";
 import {
@@ -14,7 +14,7 @@ import {
     CourseTopBar,
 } from "@/src/presentation/features/courses/components";
 import { countRealCourseExercises, startRealCourseSession } from "@/src/presentation/features/study-session/services/real-session-view.service";
-import { colors, fonts } from "@/src/presentation/theme";
+import { colors, fonts } from "@/src/theme";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import { router, useLocalSearchParams } from "expo-router";
 import { useEffect, useMemo, useState } from "react";

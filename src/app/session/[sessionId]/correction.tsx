@@ -1,4 +1,4 @@
-import { AppButton, AppCard, AppScreen, AppText, ScreenHeader } from "@/src/presentation/components/shared";
+import { AppButton, AppCard, AppScreen, AppText, ScreenHeader } from "@/src/components/shared";
 import { CorrectionPanel } from "@/src/presentation/features/study-session/components";
 import { completeRealSessionAndBuildReport, loadRealCorrectionView, type RealCorrectionView } from "@/src/presentation/features/study-session/services/real-session-view.service";
 import { router, useLocalSearchParams } from "expo-router";

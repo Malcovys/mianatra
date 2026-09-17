@@ -1,6 +1,6 @@
+import { AppButton, AppCard, AppScreen, AppText } from "@/src/components/shared";
+import { Input, InputField } from "@/src/components/ui/input";
 import type { Subject } from "@/src/database";
-import { AppButton, AppCard, AppScreen, AppText } from "@/src/presentation/components/shared";
-import { Input, InputField } from "@/src/presentation/components/ui/input";
 import {
   normalizeCourseImportSubjectName,
   resolveCourseImportSubjectForCreation,
@@ -18,7 +18,7 @@ import {
 } from "@/src/presentation/features/course-import/services/gallery-import.service";
 import { useCourseProcessing } from "@/src/presentation/features/course-processing";
 import { listSubjects } from "@/src/presentation/features/subjects";
-import { colors, fonts } from "@/src/presentation/theme";
+import { colors, fonts } from "@/src/theme";
 import { router, useLocalSearchParams } from "expo-router";
 import { useEffect, useRef, useState } from "react";
 import { Alert, Pressable, View } from "react-native";

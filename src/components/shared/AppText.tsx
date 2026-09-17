@@ -1,4 +1,4 @@
-import { fonts, typography } from "@/src/presentation/theme";
+import { fonts, typography } from "@/src/theme";
 import { Text, type TextProps } from "react-native";
 
 type AppTextVariant = keyof typeof typography;

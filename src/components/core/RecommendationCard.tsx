@@ -1,5 +1,5 @@
-import { AppButton, AppCard, AppText, StatusBadge } from "@/src/presentation/components/shared";
-import { colors } from "@/src/presentation/theme";
+import { AppButton, AppCard, AppText, StatusBadge } from "@/src/components/shared";
+import { colors } from "@/src/theme";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import { Image, View } from "react-native";
 

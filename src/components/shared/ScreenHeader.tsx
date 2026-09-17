@@ -1,4 +1,4 @@
-import { colors, spacing } from "@/src/presentation/theme";
+import { colors, spacing } from "@/src/theme";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import { router } from "expo-router";
 import { Pressable, View } from "react-native";

@@ -1,4 +1,4 @@
-import { AppText } from "@/src/presentation/components/shared";
+import { AppText } from "@/src/components/shared";
 import { Pressable, View } from "react-native";
 
 type GradeFilterProps = {

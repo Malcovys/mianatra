@@ -1,9 +1,9 @@
-import { AppButton, AppCard, AppScreen, AppText } from "@/src/presentation/components/shared";
+import { AppButton, AppCard, AppScreen, AppText } from "@/src/components/shared";
 import { getCourseDetail } from "@/src/presentation/features/courses";
 import { CourseTopBar } from "@/src/presentation/features/courses/components";
 import { loadLatestRevisionSheet, type RevisionSheetViewState } from "@/src/presentation/features/revision-sheet/services/revision-sheet-view.service";
 import { startRealCourseSession } from "@/src/presentation/features/study-session/services/real-session-view.service";
-import { colors, fonts } from "@/src/presentation/theme";
+import { colors, fonts } from "@/src/theme";
 import { router, useLocalSearchParams } from "expo-router";
 import { useEffect, useState } from "react";
 import { View } from "react-native";

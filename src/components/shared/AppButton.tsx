@@ -1,5 +1,5 @@
-import { Button, ButtonText } from "@/src/presentation/components/ui/button";
-import { colors, fonts } from "@/src/presentation/theme";
+import { Button, ButtonText } from "@/src/components/ui/button";
+import { colors, fonts } from "@/src/theme";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import { ActivityIndicator } from "react-native";
 

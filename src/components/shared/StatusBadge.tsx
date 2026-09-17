@@ -1,4 +1,4 @@
-import { colors } from "@/src/presentation/theme";
+import { colors } from "@/src/theme";
 import { View } from "react-native";
 import { AppText } from "./AppText";
 

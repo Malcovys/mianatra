@@ -1,12 +1,12 @@
-import { SubjectCard } from "@/src/presentation/components/core";
+import { SubjectCard } from "@/src/components/core";
 import {
   AppButton,
   AppCard,
   AppScreen,
   AppText,
   EmptyStateCard,
-} from "@/src/presentation/components/shared";
-import { colors } from "@/src/presentation/theme";
+} from "@/src/components/shared";
+import { colors } from "@/src/theme";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import { router } from "expo-router";
 import { Pressable, View } from "react-native";

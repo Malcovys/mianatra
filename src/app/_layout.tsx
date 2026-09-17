@@ -1,5 +1,5 @@
 import "@/global.css";
-import { GluestackUIProvider } from '@/src/presentation/components/ui/gluestack-ui-provider';
+import { GluestackUIProvider } from '@/src/components/ui/gluestack-ui-provider';
 import { Fraunces_700Bold } from "@expo-google-fonts/fraunces";
 import {
   PlusJakartaSans_400Regular,
