@@ -2,7 +2,7 @@ import { AppButton, AppCard, AppScreen, AppText, ProgressBar } from "@/src/prese
 import { loadRealCourseResults, type RealCourseResultsState } from "@/src/presentation/features/courses";
 import { CourseProgressRing, CourseTopBar } from "@/src/presentation/features/courses/components";
 import { CourseResultSummary, RecentActivityList } from "@/src/presentation/features/progress/components";
-import { fonts } from "@/src/theme";
+import { fonts } from "@/src/presentation/theme";
 import { router, useLocalSearchParams } from "expo-router";
 import { useEffect, useState } from "react";
 import { View } from "react-native";

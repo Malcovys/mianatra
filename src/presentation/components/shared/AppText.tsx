@@ -1,5 +1,5 @@
+import { fonts, typography } from "@/src/presentation/theme";
 import { Text, type TextProps } from "react-native";
-import { fonts, typography } from "@/src/theme";
 
 type AppTextVariant = keyof typeof typography;
 type AppTextTone = "primary" | "secondary" | "muted" | "inverse" | "error";

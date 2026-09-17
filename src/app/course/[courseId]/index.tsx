@@ -14,7 +14,7 @@ import {
     CourseTopBar,
 } from "@/src/presentation/features/courses/components";
 import { countRealCourseExercises, startRealCourseSession } from "@/src/presentation/features/study-session/services/real-session-view.service";
-import { colors, fonts } from "@/src/theme";
+import { colors, fonts } from "@/src/presentation/theme";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import { router, useLocalSearchParams } from "expo-router";
 import { useEffect, useMemo, useState } from "react";

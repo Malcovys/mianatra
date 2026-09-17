@@ -18,7 +18,7 @@ import {
 } from "@/src/presentation/features/course-import/services/gallery-import.service";
 import { useCourseProcessing } from "@/src/presentation/features/course-processing";
 import { listSubjects } from "@/src/presentation/features/subjects";
-import { colors, fonts } from "@/src/theme";
+import { colors, fonts } from "@/src/presentation/theme";
 import { router, useLocalSearchParams } from "expo-router";
 import { useEffect, useRef, useState } from "react";
 import { Alert, Pressable, View } from "react-native";

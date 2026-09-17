@@ -1,5 +1,5 @@
+import { colors } from "@/src/presentation/theme";
 import { View } from "react-native";
-import { colors } from "@/src/theme";
 import { AppText } from "./AppText";
 
 type StatusBadgeTone = "success" | "progress" | "warning";

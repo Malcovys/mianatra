@@ -6,8 +6,7 @@ import {
   AppText,
   EmptyStateCard,
 } from "@/src/presentation/components/shared";
-import { useHomeDashboard } from "@/src/presentation/features/home/use-home-dashboard";
-import { colors } from "@/src/theme";
+import { colors } from "@/src/presentation/theme";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import { router } from "expo-router";
 import { Pressable, View } from "react-native";

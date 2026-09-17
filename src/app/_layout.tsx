@@ -1,5 +1,4 @@
 import "@/global.css";
-import { MigrationGate } from "@/src/presentation/app/MigrationGate";
 import { GluestackUIProvider } from '@/src/presentation/components/ui/gluestack-ui-provider';
 import { Fraunces_700Bold } from "@expo-google-fonts/fraunces";
 import {
@@ -31,9 +30,7 @@ export default function RootLayout() {
   return (
     <SafeAreaProvider>
       <GluestackUIProvider>
-        <MigrationGate>
-          <Stack screenOptions={{ headerShown: false }} />
-        </MigrationGate>
+        <Stack screenOptions={{ headerShown: false }} />
       </GluestackUIProvider>
     </SafeAreaProvider>
   );

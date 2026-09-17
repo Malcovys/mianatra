@@ -1,7 +1,7 @@
-import { Pressable, View } from "react-native";
-import { router } from "expo-router";
+import { colors, spacing } from "@/src/presentation/theme";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
-import { colors, spacing } from "@/src/theme";
+import { router } from "expo-router";
+import { Pressable, View } from "react-native";
 import { AppText } from "./AppText";
 
 type ScreenHeaderProps = {
