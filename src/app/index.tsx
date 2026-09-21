@@ -5,7 +5,6 @@ import {
 } from "@/src/components/shared";
 import { colors } from "@/src/theme";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
-import { router } from "expo-router";
 import { useState } from "react";
 import { Pressable, View } from "react-native";
 
@@ -40,7 +39,7 @@ export default function HomeScreen() {
                 name: subject.name,
                 chapterCount: subject.chapterCount
               }}
-              onPress={() => router.push({ pathname: "/subject/[subjectId]", params: { subject.id } }) }
+              onPress={() => {} }
             />
           ))
         }
@@ -49,7 +48,7 @@ export default function HomeScreen() {
       <AppButton
         title="Ajouter un cours"
         iconName="plus"
-        onPress={() => router.push("/course/add")}
+        onPress={() => {}}
         className="min-h-[54px]"
       />
     </AppScreen>
