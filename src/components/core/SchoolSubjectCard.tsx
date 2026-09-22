@@ -3,7 +3,7 @@ import { colors, fonts } from "@/src/theme";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import { Pressable, View } from "react-native";
 
-export type SubjectCardData = {
+export type SchoolSubjectData = {
   id: string;
   name: string;
   // color?: string | null;
@@ -13,12 +13,12 @@ export type SubjectCardData = {
   // mainWeakness?: string | null;
 };
 
-type SubjectCardProps = {
-  subject: SubjectCardData;
+type SchoolSubjectCardProps = {
+  subject: SchoolSubjectData;
   onPress: () => void;
 };
 
-export function SubjectCard({ subject, onPress }: SubjectCardProps) {
+export function SchoolSubjectCard({ subject, onPress }: SchoolSubjectCardProps) {
   const chapterLabel = `${subject.chapterCount} chapitre${subject.chapterCount > 1 ? "s" : ""}`;
 
   return (
