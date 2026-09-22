@@ -1,5 +1,4 @@
 import "@/global.css";
-import { GluestackUIProvider } from '@/src/components/ui/gluestack-ui-provider';
 import { Fraunces_700Bold } from "@expo-google-fonts/fraunces";
 import {
   PlusJakartaSans_400Regular,
@@ -29,9 +28,7 @@ export default function RootLayout() {
 
   return (
     <SafeAreaProvider>
-      <GluestackUIProvider>
-        <Stack screenOptions={{ headerShown: false }} />
-      </GluestackUIProvider>
+      <Stack screenOptions={{ headerShown: false }} />
     </SafeAreaProvider>
   );
 }
