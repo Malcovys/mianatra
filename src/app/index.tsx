@@ -1,69 +1,65 @@
-import { CameraType, CameraView, useCameraPermissions } from 'expo-camera';
-import { useState } from 'react';
-import { Button, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import {
+  AppButton,
+  AppScreen,
+} from "@/src/components/shared";
+import * as ImagePicker from 'expo-image-picker';
+import { useState } from "react";
+import { Alert, Image } from "react-native";
 
-export default function App() {
-  const [facing, setFacing] = useState<CameraType>('back');
-  const [permission, requestPermission] = useCameraPermissions();
+// const DATA = [
+//   { id: '1', name: 'First Item', chapterCount: 1, coverUri: 'https://legacy.reactjs.org/logo-og.png' },
+//   { id: '2', name: 'Second Item', chapterCount: 1, coverUri: 'https://legacy.reactjs.org/logo-og.png' },
+//   { id: '3', name: 'Third Item', chapterCount: 1, coverUri: 'https://legacy.reactjs.org/logo-og.png' },
+// ];
 
-  if (!permission) {
-    // Camera permissions are still loading.
-    return <View />;
-  }
+/** Screen */
+export default function HomeScreen() {
+  const [image, setImage] = useState<string | null>(null)
 
-  if (!permission.granted) {
-    // Camera permissions are not granted yet.
-    return (
-      <View style={styles.container}>
-        <Text style={styles.message}>We need your permission to show the camera</Text>
-        <Button onPress={requestPermission} title="grant permission" />
-      </View>
-    );
-  }
+  const takePhoto = async () => {
+    // Camera access always requires the user's permission.
+    // Taking a photo also requires a device with a camera. The iOS Simulator
+    // does not have one, so use a physical device to test this button.
+    const permissionResult = await ImagePicker.requestCameraPermissionsAsync();
 
-  function toggleCameraFacing() {
-    setFacing(current => (current === 'back' ? 'front' : 'back'));
-  }
+    if (!permissionResult.granted) {
+      Alert.alert('Permission required', 'Permission to access the camera is required.');
+      return;
+    }
+
+    let result = await ImagePicker.launchCameraAsync({
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+
+    console.log(result);
+
+    if (!result.canceled) {
+      setImage(result.assets[0].uri);
+    }
+  };
 
   return (
-    <View style={styles.container}>
-      <CameraView style={styles.camera} facing={facing} />
-      <View style={styles.buttonContainer}>
-        <TouchableOpacity style={styles.button} onPress={toggleCameraFacing}>
-          <Text style={styles.text}>Flip Camera</Text>
-        </TouchableOpacity>
-      </View>
-    </View>
+    <AppScreen 
+      className="pt-3"
+      contentClassName="flex-1 p-0"
+      scroll={false}
+    >
+      {/* <FlatList 
+        keyExtractor={item => item.id} 
+        contentContainerClassName="gap-2 flex-1 px-5"
+        data={DATA}
+        renderItem={({ item }) => (
+          <SchoolSubjectCard
+            subject={item}
+            onPress={() => {}}
+          />
+        )}
+      /> */}
+      {image && <Image source={{ uri: image }} className="h-40 w-40" />}
+
+      <AppButton title="Ajouter" onPress={takePhoto}/>
+    </AppScreen>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-  },
-  message: {
-    textAlign: 'center',
-    paddingBottom: 10,
-  },
-  camera: {
-    flex: 1,
-  },
-  buttonContainer: {
-    position: 'absolute',
-    bottom: 64,
-    flexDirection: 'row',
-    backgroundColor: 'transparent',
-    width: '100%',
-    paddingHorizontal: 64,
-  },
-  button: {
-    flex: 1,
-    alignItems: 'center',
-  },
-  text: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: 'white',
-  },
-});
